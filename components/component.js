@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react"
+import Class from "./class"
+
 // Sample Component:
 // {
 //     "Section": "570",
@@ -16,6 +19,7 @@
 //     "Campus": "King's",
 //     "Delivery": "In Person"
 // }
+
 const daysValues = ["M", "Tu", "W", "Th", "F"]
 const hourValues = [
   "7:00 AM",
@@ -47,42 +51,52 @@ const hourValues = [
   "8:00 PM",
   "8:30 PM",
   "9:00 PM",
-  "9:30 PM",
+  "9:30 PM"
 ]
 
-import { useEffect, useState } from "react"
-
 export default function Component({ data }) {
-  const [loaded, setloaded] = useState(false)
+  const [loaded, setLoaded] = useState(false)
+  const [position, setPosition] = useState({})
 
-  const [time, setTime] = useState([])
-  const [days, setDays] = useState([])
+  const getRows = (startTime, endTime) => {
+    const start = hourValues.indexOf(startTime) + 2
+    const end = hourValues.indexOf(endTime) + 2
+
+    return { start, end }
+  }
+
+  const getCols = (days) => {
+    const cols = days.map((day) => daysValues.indexOf(day) + 2)
+    return cols
+  }
 
   useEffect(() => {
-    const { Days: days, "Start Time": startTime, "End Time": endTime } = data
+    const { Days, "Start Time": startTime, "End Time": endTime } = data
 
-    const getRow = (time) => {
-      const row = hourValues.indexOf(time) + 2
-      console.log(time, row)
-      return row
-    }
+    const rows = getRows(startTime, endTime)
+    const cols = getCols(Days)
 
-    const start = getRow(startTime)
-    const end = getRow(endTime)
-
-    console.log([start, end])
-    setTime([start, end + 1])
-    setloaded(true)
+    setPosition({ x: cols, y: rows })
+    setLoaded(true)
   }, [data])
+
+  useEffect(() => {
+    console.log(position)
+  }, [position])
 
   return (
     <>
       {loaded && (
-        <div
-          className={`row-start-[${time[0]}] row-end-[${time[1]}] col-start-2 rounded-xl p-4 bg-red-200`}
-        >
-          <span>ECON 1022</span>
-        </div>
+        <>
+          {position["x"].map((col, idx) => (
+            <Class
+              key={idx}
+              start={position["y"]["start"]}
+              end={position["y"]["end"]}
+              day={col}
+            />
+          ))}
+        </>
       )}
     </>
   )
