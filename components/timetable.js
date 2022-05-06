@@ -4,7 +4,7 @@ import Course from "./course"
 
 export default function Timetable({ courses }) {
   return (
-    <div className="flex flex-col space-y-2 w-max h-fit p-4 text-center drop-shadow-md rounded-2xl bg-white">
+    <div className="flex flex-col space-y-2 w-10/12 h-screen overflow-scroll p-4 text-center drop-shadow-md rounded-2xl bg-white">
       <h1 className="text-2xl font-semibold">Fall/Winter</h1>
       <div className={styles.timetable}>
         {/* Must explicitly label grid positions so css compiler doesn't purge the currently unused dynamic classes */}
@@ -52,7 +52,7 @@ export default function Timetable({ courses }) {
           return (
             <Course
               key={course + idx}
-              name={course["Name"]}
+              name={course["Name"].split("-")[0]}
               data={course["Components"][component]}
             />
           )

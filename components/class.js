@@ -8,7 +8,7 @@ export default function Class({
   name,
   type,
   section,
-  location
+  location,
 }) {
   useEffect(() => {
     console.log(start, end, day)
@@ -20,7 +20,7 @@ export default function Class({
     >
       <div className="space-y-1">
         <div>
-          <p className="text-sm font-bold opacity-70">{name.toUpperCase()}</p>
+          <p className="text-xs font-bold opacity-70">{name.toUpperCase()}</p>
           <p className="text-xs font-light">
             {type} {section}
           </p>

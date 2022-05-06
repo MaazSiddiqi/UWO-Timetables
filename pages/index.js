@@ -28,7 +28,7 @@ export default function Home() {
       <Head>
         <title>uPlanned</title>
       </Head>
-      <div className="grid place-items-center w-fit p-16 bg-slate-50">
+      <div className="grid place-items-center w-screen p-16 bg-slate-50">
         {loaded && <Timetable courses={user["courses"]} />}
       </div>
     </>
