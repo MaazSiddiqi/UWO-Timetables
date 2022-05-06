@@ -1,18 +1,12 @@
-import React, { useEffect } from "react"
-import Component from "./component"
-
-import calcSubjects from "../public/CALCULUS.json"
+import React, { useState } from "react"
 import styles from "../styles/timetable.module.css"
+import Course from "./course"
 
-const testComponent = calcSubjects["Courses"][0]["Components"][4]
-
-export default function Timetable() {
-  useEffect(() => {}, [])
-
+export default function Timetable({ courses }) {
   return (
-    <div className="flex flex-col space-y-2 w-screen h-fit p-4 text-center drop-shadow-md rounded-2xl bg-white">
+    <div className="flex flex-col space-y-2 w-max h-fit p-4 text-center drop-shadow-md rounded-2xl bg-white">
       <h1 className="text-2xl font-semibold">Fall/Winter</h1>
-      <div className="grid grid-cols-6 grid-flow-row-dense grow border-2 rounded-xl overflow-scroll">
+      <div className={styles.timetable}>
         {/* Must explicitly label grid positions so css compiler doesn't purge the currently unused dynamic classes */}
         <p className={`${styles.heading} col-start-1`}>Times</p>
         <p className={`${styles.heading} col-start-2`}>Monday</p>
@@ -52,7 +46,17 @@ export default function Timetable() {
         <p className={`${styles.time} row-start-[30] row-end-[30]`}>9:00 PM</p>
         <p className={`${styles.time} row-start-[31] row-end-[31]`}>9:30 PM</p>
 
-        <Component data={testComponent} />
+        {courses.map(([course, component], idx) => {
+          console.log(course, course["Components"][component])
+
+          return (
+            <Course
+              key={course + idx}
+              name={course["Name"]}
+              data={course["Components"][component]}
+            />
+          )
+        })}
       </div>
     </div>
   )

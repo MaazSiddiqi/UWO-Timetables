@@ -1,16 +1,32 @@
 import { useEffect } from "react"
 import styles from "../styles/class.module.css"
 
-export default function Class({ start, end, day }) {
+export default function Class({
+  start,
+  end,
+  day,
+  name,
+  type,
+  section,
+  location
+}) {
   useEffect(() => {
     console.log(start, end, day)
   }, [start, end, day])
 
   return (
     <div
-      className={`row-start-[${start}] row-end-[${end}] col-start-${day} rounded-xl p-4 bg-red-200`}
+      className={`grid place-items-center space-y-1 m-1 row-start-[${start}] row-end-[${end}] col-start-${day} rounded-xl p-4 bg-red-200`}
     >
-      <span>ECON 1022</span>
+      <div className="space-y-1">
+        <div>
+          <p className="text-sm font-bold opacity-70">{name.toUpperCase()}</p>
+          <p className="text-xs font-light">
+            {type} {section}
+          </p>
+        </div>
+        <p className="text-sm font-semibold opacity-60">{location}</p>
+      </div>
     </div>
   )
 }

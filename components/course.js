@@ -51,10 +51,10 @@ const hourValues = [
   "8:00 PM",
   "8:30 PM",
   "9:00 PM",
-  "9:30 PM"
+  "9:30 PM",
 ]
 
-export default function Component({ data }) {
+export default function Course({ name, data }) {
   const [loaded, setLoaded] = useState(false)
   const [position, setPosition] = useState({})
 
@@ -71,6 +71,7 @@ export default function Component({ data }) {
   }
 
   useEffect(() => {
+    console.log(data)
     const { Days, "Start Time": startTime, "End Time": endTime } = data
 
     const rows = getRows(startTime, endTime)
@@ -93,7 +94,12 @@ export default function Component({ data }) {
               key={idx}
               start={position["y"]["start"]}
               end={position["y"]["end"]}
+              // end={position["y"]["start"] + 4}
               day={col}
+              name={name}
+              type={data["Component"]}
+              section={data["Section"]}
+              location={data["Location"]}
             />
           ))}
         </>

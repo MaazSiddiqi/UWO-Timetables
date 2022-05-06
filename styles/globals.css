@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .test {
+    @apply bg-gray-500;
+  }
+}
+
 html,
 body {
   padding: 0;
