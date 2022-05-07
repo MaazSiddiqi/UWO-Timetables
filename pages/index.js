@@ -28,8 +28,16 @@ export default function Home() {
       <Head>
         <title>uPlanned</title>
       </Head>
-      <div className="grid place-items-center w-screen p-16 bg-slate-50">
-        {loaded && <Timetable courses={user["courses"]} />}
+      <div className="grid place-items-center w-screen h-screen overflow-hidden p-16 bg-slate-50">
+        {loaded ? (
+          <Timetable
+            title="Fall / Winter"
+            courses={user["courses"]}
+            className="w-10/12 h-full bg-white"
+          />
+        ) : (
+          <div>Loading...</div>
+        )}
       </div>
     </>
   )

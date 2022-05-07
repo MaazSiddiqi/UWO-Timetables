@@ -2,10 +2,12 @@ import React, { useState } from "react"
 import styles from "../styles/timetable.module.css"
 import Course from "./course"
 
-export default function Timetable({ courses }) {
+export default function Timetable({ title = "", courses, className = "" }) {
   return (
-    <div className="flex flex-col space-y-2 w-10/12 h-screen overflow-scroll p-4 text-center drop-shadow-md rounded-2xl bg-white">
-      <h1 className="text-2xl font-semibold">Fall/Winter</h1>
+    <div
+      className={`flex flex-col space-y-2 overflow-hidden p-4 text-center drop-shadow-md rounded-2xl ${className}`}
+    >
+      {title !== "" && <h1 className="text-2xl font-semibold">{title}</h1>}
       <div className={styles.timetable}>
         {/* Must explicitly label grid positions so css compiler doesn't purge the currently unused dynamic classes */}
         <p className={`${styles.heading} col-start-1`}>Times</p>

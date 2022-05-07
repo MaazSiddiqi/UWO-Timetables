@@ -1,12 +1,12 @@
 .timetable {
-  @apply grid grid-cols-6 grow border-2 rounded-xl;
-  grid-template-rows: repeat(31, 1fr);
+  @apply grid grid-cols-6 grow border-2 rounded-xl overflow-scroll;
+  /* grid-template-rows: repeat(31, 1fr); */
 }
 
 .heading {
-  @apply grid place-items-center w-full h-full  py-1 font-light border-b-2 bg-gray-50;
+  @apply grid place-items-center sticky top-0 z-10 w-full h-full  py-1 font-light border-b-2 bg-gray-50;
 }
 
 .time {
-  @apply grid place-items-center w-full h-full col-start-1 text-sm font-light border-r-2 border-b-2 border-gray-100 text-gray-500;
+  @apply grid place-items-center w-full h-11 col-start-1 text-sm font-light border-r-2 border-b-2 border-gray-100 text-gray-500;
 }
