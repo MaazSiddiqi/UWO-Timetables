@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import styles from "../styles/timetable.module.css"
+import styles from "@/styles/timetable.module.css"
 import CourseGraph from "./courseGraph"
 
 export default function Timetable({ title = "", courses, className = "" }) {

@@ -1,6 +1,3 @@
-import { useEffect } from "react"
-import styles from "../styles/class.module.css"
-
 export default function ClassNode({
   start,
   end,
@@ -12,7 +9,7 @@ export default function ClassNode({
 }) {
   return (
     <div
-      className={`grid place-items-center space-y-1 m-1 row-start-[${start}] row-end-[${end}] col-start-${day} rounded-xl p-4 bg-red-200`}
+      className={`grid place-items-center space-y-1 m-1 row-start-[${start}] row-end-[${end}] col-start-${day} rounded-xl p-4 bg-slate-200`}
     >
       <div className="space-y-1">
         <div>

@@ -1,7 +1,7 @@
 import Head from "next/head"
 import { useEffect, useState } from "react"
-import Timetable from "../components/timetable"
-import AddCourses from "../components/addCourse"
+import Timetable from "@/components/timetableGraph/timetable"
+import AddCourses from "@/components/addCourses/addCourse"
 import calcSubjects from "../public/CALCULUS.json"
 
 const sampleUser = {
@@ -34,8 +34,8 @@ export default function Home() {
       <Head>
         <title>uPlanned</title>
       </Head>
-      <div className="flex space-y-16 space-x-3  w-screen p-16 bg-slate-50">
-        <div className="w-1/3 py-16">
+      <div className="flex space-x-5 w-screen h-screen p-8 bg-slate-50">
+        <div className="w-1/3">
           <AddCourses />
         </div>
 
