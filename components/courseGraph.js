@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import Class from "./class"
+import ClassNode from "./classNode"
 
 // Sample Component:
 // {
@@ -85,7 +85,7 @@ export default function CourseGraph({ name, data }) {
       {loaded && (
         <>
           {position["x"].map((col, idx) => (
-            <Class
+            <ClassNode
               key={idx}
               start={position["y"]["start"]}
               end={position["y"]["end"]}

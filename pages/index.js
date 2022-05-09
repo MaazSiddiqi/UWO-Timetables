@@ -34,8 +34,10 @@ export default function Home() {
       <Head>
         <title>uPlanned</title>
       </Head>
-      <div className="flex flex-col items-center space-y-16  w-screen p-16 bg-slate-50">
-        <AddCourses />
+      <div className="flex space-y-16 space-x-3  w-screen p-16 bg-slate-50">
+        <div className="w-1/3 py-16">
+          <AddCourses />
+        </div>
 
         <div
           className={`flex flex-col space-y-2 overflow-hidden p-4 text-center drop-shadow-md rounded-2xl w-10/12 bg-white`}

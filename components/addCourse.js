@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import calcSubjects from "../public/CALCULUS.json"
 
 export default function AddCourses() {
@@ -7,7 +7,7 @@ export default function AddCourses() {
   const [nameQuery, setNameQuery] = useState("")
   const [loaded, setLoaded] = useState(false)
 
-  const query = () => {
+  const query = useCallback(() => {
     console.log("Querying courses...")
     const findingName = nameQuery !== ""
 
@@ -25,7 +25,7 @@ export default function AddCourses() {
     console.log("Courses found:", result)
 
     setShowCourses(result)
-  }
+  }, [courses, nameQuery])
 
   useEffect(() => {
     setTimeout(() => {
@@ -62,28 +62,34 @@ export default function AddCourses() {
   }, [nameQuery])
 
   return (
-    <div className="w-full bg-white rounded-lg h-1/3 overflow-hidden p-8 space-y-4">
+    <div className="w-full h-full bg-white rounded-lg overflow-hidden p-8 space-y-4">
       <h1 className="font-semibold text-xl">Add a course</h1>
-      <div className="flex space-x-5">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault()
+          query()
+        }}
+        className="flex flex-col space-y-5"
+      >
         <input
           type="text"
-          className="w-1/2 py-2 px-3 drop-shadow-md rounded-lg"
+          className="w-full py-2 px-3 drop-shadow-md rounded-lg"
           value={nameQuery}
           onChange={(e) => setNameQuery(e.target.value)}
           placeholder="Course Name"
         />
 
         <button
-          onClick={query}
-          className="px-4 py-1 ml-5 rounded-full border-2 hover:shadow-lg hover:scale-105 transition-all duration-150 active:scale-95 "
+          type="submit"
+          className="px-4 py-1 rounded-full border-2 hover:shadow-lg hover:scale-105 transition-all duration-150 active:scale-95 "
         >
           query
         </button>
-        <div className="font-xs">
+        <div className="flex  font-xs">
           <p>courses: {courses.length}</p>
           <p>showCourses: {showCourses.length}</p>
         </div>
-      </div>
+      </form>
 
       <div className="p-2 space-y-2 overflow-scroll">
         {loaded ? (

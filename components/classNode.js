@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import styles from "../styles/class.module.css"
 
-export default function Class({
+export default function ClassNode({
   start,
   end,
   day,
