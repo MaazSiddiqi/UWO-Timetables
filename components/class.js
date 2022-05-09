@@ -10,10 +10,6 @@ export default function Class({
   section,
   location,
 }) {
-  useEffect(() => {
-    console.log(start, end, day)
-  }, [start, end, day])
-
   return (
     <div
       className={`grid place-items-center space-y-1 m-1 row-start-[${start}] row-end-[${end}] col-start-${day} rounded-xl p-4 bg-red-200`}

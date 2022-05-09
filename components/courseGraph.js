@@ -54,7 +54,7 @@ const hourValues = [
   "9:30 PM",
 ]
 
-export default function Course({ name, data }) {
+export default function CourseGraph({ name, data }) {
   const [loaded, setLoaded] = useState(false)
   const [position, setPosition] = useState({})
 
@@ -71,7 +71,6 @@ export default function Course({ name, data }) {
   }
 
   useEffect(() => {
-    console.log(data)
     const { Days, "Start Time": startTime, "End Time": endTime } = data
 
     const rows = getRows(startTime, endTime)
@@ -80,10 +79,6 @@ export default function Course({ name, data }) {
     setPosition({ x: cols, y: rows })
     setLoaded(true)
   }, [data])
-
-  useEffect(() => {
-    console.log(position)
-  }, [position])
 
   return (
     <>

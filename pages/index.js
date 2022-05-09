@@ -1,14 +1,20 @@
 import Head from "next/head"
 import { useEffect, useState } from "react"
 import Timetable from "../components/timetable"
+import AddCourses from "../components/addCourse"
 import calcSubjects from "../public/CALCULUS.json"
 
 const sampleUser = {
   name: "Maaz Siddiqi",
-  courses: [
-    [calcSubjects["Courses"][0], 2],
-    [calcSubjects["Courses"][5], 0],
-    [calcSubjects["Courses"][7], 0],
+  timetables: [
+    {
+      name: "My fall draft",
+      courses: [
+        [calcSubjects["Courses"][0], 2],
+        [calcSubjects["Courses"][5], 0],
+        [calcSubjects["Courses"][7], 0],
+      ],
+    },
   ],
 }
 
@@ -28,16 +34,23 @@ export default function Home() {
       <Head>
         <title>uPlanned</title>
       </Head>
-      <div className="grid place-items-center w-screen h-screen overflow-hidden p-16 bg-slate-50">
-        {loaded ? (
-          <Timetable
-            title="Fall / Winter"
-            courses={user["courses"]}
-            className="w-10/12 h-full bg-white"
-          />
-        ) : (
-          <div>Loading...</div>
-        )}
+      <div className="flex flex-col items-center space-y-16  w-screen p-16 bg-slate-50">
+        <AddCourses />
+
+        <div
+          className={`flex flex-col space-y-2 overflow-hidden p-4 text-center drop-shadow-md rounded-2xl w-10/12 bg-white`}
+        >
+          {loaded ? (
+            <>
+              <h1 className="text-2xl font-semibold">
+                {user["timetables"][0]["name"]}
+              </h1>
+              <Timetable courses={user["timetables"][0]["courses"]} />
+            </>
+          ) : (
+            <div>Loading...</div>
+          )}
+        </div>
       </div>
     </>
   )

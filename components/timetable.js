@@ -1,14 +1,11 @@
 import React, { useState } from "react"
 import styles from "../styles/timetable.module.css"
-import Course from "./course"
+import CourseGraph from "./courseGraph"
 
 export default function Timetable({ title = "", courses, className = "" }) {
   return (
-    <div
-      className={`flex flex-col space-y-2 overflow-hidden p-4 text-center drop-shadow-md rounded-2xl ${className}`}
-    >
-      {title !== "" && <h1 className="text-2xl font-semibold">{title}</h1>}
-      <div className={styles.timetable}>
+    <>
+      <div className={`${styles.timetable} ${className}`}>
         {/* Must explicitly label grid positions so css compiler doesn't purge the currently unused dynamic classes */}
         <p className={`${styles.heading} col-start-1`}>Times</p>
         <p className={`${styles.heading} col-start-2`}>Monday</p>
@@ -49,10 +46,8 @@ export default function Timetable({ title = "", courses, className = "" }) {
         <p className={`${styles.time} row-start-[31] row-end-[31]`}>9:30 PM</p>
 
         {courses.map(([course, component], idx) => {
-          console.log(course, course["Components"][component])
-
           return (
-            <Course
+            <CourseGraph
               key={course + idx}
               name={course["Name"].split("-")[0]}
               data={course["Components"][component]}
@@ -60,6 +55,6 @@ export default function Timetable({ title = "", courses, className = "" }) {
           )
         })}
       </div>
-    </div>
+    </>
   )
 }
