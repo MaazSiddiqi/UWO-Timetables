@@ -6,10 +6,12 @@ export default function ClassNode({
   type,
   section,
   location,
+  remove,
 }) {
   return (
     <div
-      className={`grid place-items-center space-y-1 m-1 row-start-[${start}] row-end-[${end}] col-start-${day} rounded-xl p-4 bg-slate-200`}
+      onClick={() => remove()}
+      className={`grid place-items-center space-y-1 m-1 row-start-[${start}] row-end-[${end}] col-start-${day} rounded-xl p-4 bg-slate-300/50 hover:bg-red-200 transition-colors duration-150`}
     >
       <div className="space-y-1">
         <div>

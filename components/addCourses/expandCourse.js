@@ -1,4 +1,6 @@
 import { useMemo } from "react"
+import { addCourse } from "@features/activeTT"
+import { useDispatch } from "react-redux"
 import ComponentItem from "./componentListItem"
 
 const closeSVG = (
@@ -18,11 +20,17 @@ const closeSVG = (
   </svg>
 )
 
-export default function ExpandCourse({ course, add, deselect }) {
+export default function ExpandCourse({ course, deselect }) {
   const { name, subject, level, term, detail, components } = useMemo(
     () => course,
     [course],
   )
+
+  const dispatch = useDispatch()
+
+  const add = (component) => {
+    dispatch(addCourse({ title: name, component }))
+  }
 
   return (
     <div className="flex flex-col w-full h-full py-1 px-2 space-y-5 overflow-y-hidden">
@@ -51,9 +59,7 @@ export default function ExpandCourse({ course, add, deselect }) {
       <div className="grow py-3 space-y-3 overflow-x-visible overflow-y-scroll">
         {components.map((component, idx) => (
           <ComponentItem
-            add={() => {
-              add((course, idx))
-            }}
+            add={() => add(component)}
             key={idx}
             component={component}
           />

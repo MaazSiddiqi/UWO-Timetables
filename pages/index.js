@@ -38,7 +38,9 @@ export default function Home() {
   const [loaded, setLoaded] = useState(false)
 
   const user = useSelector((state) => state.user.value)
-  const { name, courses } = useSelector((state) => state.activeTT.value)
+  const { name: activeName, courses: activeCourses } = useSelector(
+    (state) => state.activeTT.value,
+  )
 
   const dispatch = useDispatch()
 
@@ -74,11 +76,11 @@ export default function Home() {
         >
           {loaded ? (
             <>
-              <h1 className="text-2xl font-semibold">{name}</h1>
-              <Timetable courses={courses} />
+              <h1 className="text-2xl font-semibold">{activeName}</h1>
+              <Timetable courses={activeCourses} />
             </>
           ) : (
-            <div>Loading...</div>
+            <>Loading...</>
           )}
         </div>
       </div>

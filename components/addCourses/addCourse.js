@@ -28,7 +28,7 @@ const savedCourses = calcSubjects["Courses"].slice(0, 30).map((course) => {
   return data
 })
 
-export default function AddCourses({ add }) {
+export default function AddCourses() {
   const [loaded, setLoaded] = useState(false)
 
   const [courses, setCourses] = useState([])
@@ -108,7 +108,6 @@ export default function AddCourses({ add }) {
       ) : (
         <ExpandCourse
           course={selectedCourse}
-          add={add}
           deselect={() => setSelectedCourse(null)}
         />
       )}

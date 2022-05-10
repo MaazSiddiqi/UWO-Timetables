@@ -1,4 +1,6 @@
-import { useMemo, useState, useEffect } from "react"
+import { useMemo, useState, useEffect, useCallback } from "react"
+import { removeCourse } from "@features/activeTT"
+import { useDispatch, useSelector } from "react-redux"
 import ClassNode from "./classNode"
 
 // Sample Component:
@@ -57,6 +59,9 @@ const hourValues = [
 export default function CourseGraph({ name, data }) {
   const [position, setPosition] = useState(null)
 
+  const { courses } = useSelector((state) => state.activeTT.value)
+  const dispatch = useDispatch()
+
   const {
     Section: section,
     Component: type,
@@ -72,8 +77,14 @@ export default function CourseGraph({ name, data }) {
     Delivery: delivery,
   } = useMemo(() => data, [data])
 
+  const remove = useCallback(() => {
+    if (!position) return null
+
+    console.log(`Removing ${name}...`)
+    dispatch(removeCourse({ title: name, component: data }))
+  }, [data, dispatch, name, position])
+
   useEffect(() => {
-    console.log(startTime, endTime, days)
     const getRows = (startTime, endTime) => {
       const start = hourValues.indexOf(startTime) + 2
       const end = hourValues.indexOf(endTime) + 2
@@ -93,7 +104,6 @@ export default function CourseGraph({ name, data }) {
     }
 
     const pos = getPosition()
-    console.log(pos)
     setPosition(pos)
   }, [days, endTime, startTime])
 
@@ -102,6 +112,7 @@ export default function CourseGraph({ name, data }) {
       {position &&
         position["x"].map((col, idx) => (
           <ClassNode
+            remove={remove}
             key={name + idx}
             start={position["y"]["start"]}
             end={position["y"]["end"]}
