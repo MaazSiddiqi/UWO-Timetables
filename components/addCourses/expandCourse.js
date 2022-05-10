@@ -18,7 +18,7 @@ const closeSVG = (
   </svg>
 )
 
-export default function ExpandCourse({ course, deselect }) {
+export default function ExpandCourse({ course, add, deselect }) {
   const { name, subject, level, term, detail, components } = useMemo(
     () => course,
     [course],
@@ -50,7 +50,13 @@ export default function ExpandCourse({ course, deselect }) {
       </div>
       <div className="grow py-3 space-y-3 overflow-x-visible overflow-y-scroll">
         {components.map((component, idx) => (
-          <ComponentItem key={idx} component={component} />
+          <ComponentItem
+            add={() => {
+              add((course, idx))
+            }}
+            key={idx}
+            component={component}
+          />
         ))}
       </div>
     </div>

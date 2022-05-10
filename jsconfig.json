@@ -4,8 +4,9 @@
     "paths": {
       "@/components/*": ["components/*"],
       "@/styles/*": ["styles/*"],
-      "@/public/*": ["public/*"]
+      "@/public/*": ["public/*"],
+      "@features/*": ["features/*"]
     }
   },
-  "js/ts.implicitProjectConfig.checkJs": true
+  "checkJs": true
 }

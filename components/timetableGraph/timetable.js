@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import styles from "@/styles/timetable.module.css"
 import CourseGraph from "./courseGraph"
 
-export default function Timetable({ title = "", courses, className = "" }) {
+export default function Timetable({ courses, className = "" }) {
   return (
     <>
       <div className={`${styles.timetable} ${className}`}>
@@ -45,15 +45,9 @@ export default function Timetable({ title = "", courses, className = "" }) {
         <p className={`${styles.time} row-start-[30] row-end-[30]`}>9:00 PM</p>
         <p className={`${styles.time} row-start-[31] row-end-[31]`}>9:30 PM</p>
 
-        {courses.map(([course, component], idx) => {
-          return (
-            <CourseGraph
-              key={course + idx}
-              name={course["Name"].split("-")[0]}
-              data={course["Components"][component]}
-            />
-          )
-        })}
+        {courses.map(({ title, component }, idx) => (
+          <CourseGraph key={title + idx} name={title} data={component} />
+        ))}
       </div>
     </>
   )

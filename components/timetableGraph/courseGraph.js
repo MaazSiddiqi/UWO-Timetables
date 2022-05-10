@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useMemo, useState, useEffect } from "react"
 import ClassNode from "./classNode"
 
 // Sample Component:
@@ -55,50 +55,63 @@ const hourValues = [
 ]
 
 export default function CourseGraph({ name, data }) {
-  const [loaded, setLoaded] = useState(false)
-  const [position, setPosition] = useState({})
+  const [position, setPosition] = useState(null)
 
-  const getRows = (startTime, endTime) => {
-    const start = hourValues.indexOf(startTime) + 2
-    const end = hourValues.indexOf(endTime) + 2
-
-    return { start, end }
-  }
-
-  const getCols = (days) => {
-    const cols = days.map((day) => daysValues.indexOf(day) + 2)
-    return cols
-  }
+  const {
+    Section: section,
+    Component: type,
+    "Class Nbr": classNbr,
+    Days: days,
+    "Start Time": startTime,
+    "End Time": endTime,
+    Location: location,
+    Instructor: prof,
+    Notes: notes,
+    Status: status,
+    Campus: campus,
+    Delivery: delivery,
+  } = useMemo(() => data, [data])
 
   useEffect(() => {
-    const { Days, "Start Time": startTime, "End Time": endTime } = data
+    console.log(startTime, endTime, days)
+    const getRows = (startTime, endTime) => {
+      const start = hourValues.indexOf(startTime) + 2
+      const end = hourValues.indexOf(endTime) + 2
 
-    const rows = getRows(startTime, endTime)
-    const cols = getCols(Days)
+      return { start, end }
+    }
 
-    setPosition({ x: cols, y: rows })
-    setLoaded(true)
-  }, [data])
+    const getCols = (days) => {
+      const cols = days.map((day) => daysValues.indexOf(day) + 2)
+      return cols
+    }
+
+    const getPosition = () => {
+      const rows = getRows(startTime, endTime)
+      const cols = getCols(days)
+      return { x: cols, y: rows }
+    }
+
+    const pos = getPosition()
+    console.log(pos)
+    setPosition(pos)
+  }, [days, endTime, startTime])
 
   return (
     <>
-      {loaded && (
-        <>
-          {position["x"].map((col, idx) => (
-            <ClassNode
-              key={idx}
-              start={position["y"]["start"]}
-              end={position["y"]["end"]}
-              // end={position["y"]["start"] + 4}
-              day={col}
-              name={name}
-              type={data["Component"]}
-              section={data["Section"]}
-              location={data["Location"]}
-            />
-          ))}
-        </>
-      )}
+      {position &&
+        position["x"].map((col, idx) => (
+          <ClassNode
+            key={name + idx}
+            start={position["y"]["start"]}
+            end={position["y"]["end"]}
+            day={col}
+            name={name}
+            type={type}
+            section={section}
+            location={location}
+          />
+        ))}
     </>
   )
 }

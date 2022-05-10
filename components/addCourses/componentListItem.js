@@ -2,7 +2,7 @@ import { useEffect, useCallback } from "react"
 
 const daysTemplate = ["M", "Tu", "W", "Th", "F"]
 
-export default function ComponentListItem({ component }) {
+export default function ComponentListItem({ component, add }) {
   const {
     Section: section,
     Component: type,
@@ -28,9 +28,26 @@ export default function ComponentListItem({ component }) {
   return (
     <div className="w-full text-sm bg-white cursor-pointer rounded-xl shadow-md p-3 btn">
       <div className="flex justify-between">
-        <h3 className="font-semibold">
-          {type} {section}
-        </h3>
+        <div className="flex items-center space-x-1">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-4 w-4 btn hover:text-green-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+            onClick={add}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <h3 className="font-semibold">
+            {type} {section}
+          </h3>
+        </div>
         <div className="flex justify-between w-2/5 font-mono text-center">
           {delivery !== "In Person" ? (
             <p className="w-full text-gray-400 text-center">{delivery}</p>
@@ -39,7 +56,7 @@ export default function ComponentListItem({ component }) {
               days.indexOf(day) > -1 ? (
                 <p
                   key={day + idx}
-                  className={`px-1 
+                  className={`px-1
                       ${idx === 0 && "text-orange-400"} 
                       ${idx === 1 && "text-lime-400"} 
                       ${idx === 2 && "text-teal-400"} 
@@ -49,7 +66,10 @@ export default function ComponentListItem({ component }) {
                   {day}
                 </p>
               ) : (
-                <p key={day + idx} className="px-1 text-gray-100">
+                <p
+                  key={day + idx}
+                  className="px-1 text-gray-200 text-opacity-60"
+                >
                   {day}
                 </p>
               ),
