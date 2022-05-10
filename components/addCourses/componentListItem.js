@@ -1,4 +1,5 @@
-import { useEffect, useCallback } from "react"
+import { useCallback, useEffect } from "react"
+import { useSelector } from "react-redux"
 
 const daysTemplate = ["M", "Tu", "W", "Th", "F"]
 
@@ -26,7 +27,12 @@ export default function ComponentListItem({ component, add }) {
   }, [])
 
   return (
-    <div className="w-full text-sm bg-white cursor-pointer rounded-xl shadow-md p-3 btn">
+    <div
+      onMouseUp={() => !component.inTT && add()}
+      className={`w-full text-sm ${
+        component.inTT ? "bg-green-100 " : "bg-white cursor-pointer "
+      } rounded-xl shadow-md p-3 btn`}
+    >
       <div className="flex justify-between">
         <div className="flex items-center space-x-1">
           <svg
@@ -36,7 +42,6 @@ export default function ComponentListItem({ component, add }) {
             viewBox="0 0 24 24"
             stroke="currentColor"
             strokeWidth={2}
-            onClick={add}
           >
             <path
               strokeLinecap="round"
@@ -80,26 +85,3 @@ export default function ComponentListItem({ component, add }) {
     </div>
   )
 }
-
-// {
-//     "Section": "004",
-//     "Component": "LEC",
-//     "Class Nbr": "10293",
-//     "Days": [
-//         "M",
-//         "W",
-//         "Th",
-//         "F"
-//     ],
-//     "Start Time": "8:30 AM",
-//     "End Time": "9:30 AM",
-//     "Location": "SH-3345",
-//     "Instructor": "Z. Krougly",
-//     "Notes": [
-//         "REQUIRES FINAL MARK OF AT LEAST 55% IN CALC 1000A/B OR 1100A/B. ",
-//         "REQUISITES: Prerequisite(s): A minimum mark of 55% in one of Calculus 1000A/B, Calculus 1500A/B, Numerical and Mathematical Methods 1412A/B, the former Applied Mathematics 1412A/B."
-//     ],
-//     "Status": "Full",
-//     "Campus": "Main",
-//     "Delivery": "In Person"
-// }

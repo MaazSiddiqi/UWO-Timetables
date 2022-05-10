@@ -1,6 +1,6 @@
+import { addCourse, useSearchCourses } from "@features/activeTT"
 import { useMemo } from "react"
-import { addCourse } from "@features/activeTT"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import ComponentItem from "./componentListItem"
 
 const closeSVG = (
@@ -26,6 +26,8 @@ export default function ExpandCourse({ course, deselect }) {
     [course],
   )
 
+  const { courses } = useSelector((store) => store.activeTT.value)
+  const search = useSearchCourses()
   const dispatch = useDispatch()
 
   const add = (component) => {
@@ -57,13 +59,19 @@ export default function ExpandCourse({ course, deselect }) {
         </button>
       </div>
       <div className="grow py-3 space-y-3 overflow-x-visible overflow-y-scroll">
-        {components.map((component, idx) => (
-          <ComponentItem
-            add={() => add(component)}
-            key={idx}
-            component={component}
-          />
-        ))}
+        {components.map((component, idx) => {
+          const _component = { ...component }
+          const [_, found] = search({ title: name, component })
+          _component.inTT = found
+
+          return (
+            <ComponentItem
+              add={() => add(component)}
+              key={idx}
+              component={_component}
+            />
+          )
+        })}
       </div>
     </div>
   )
