@@ -22,7 +22,7 @@ export default function QueryCourses({ runQuery }) {
         type="submit"
         className="font-light px-4 py-2 rounded-full border-2 hover:shadow-lg hover:scale-105 transition-all duration-150 active:scale-95 "
       >
-        QUERY
+        Query
       </button>
     </form>
   )

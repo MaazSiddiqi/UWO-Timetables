@@ -1,6 +1,6 @@
 import { useMemo } from "react"
 
-export default function CourseItem({ course, select }) {
+export default function CourseListItem({ course, select, children }) {
   const { subject, name, level, term, components } = useMemo(
     () => course,
     [course],
@@ -8,7 +8,7 @@ export default function CourseItem({ course, select }) {
   return (
     <div
       onClick={() => select(course)}
-      className="rounded-xl shadow-md p-3 hover:scale-105 transition-all duration-150"
+      className="cursor-pointer rounded-xl shadow-md p-3 btn"
     >
       <h1 className="font-semibold">
         {subject.slice(0, 4)} {level}

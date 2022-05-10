@@ -1,7 +1,8 @@
 import { useEffect, useState, useCallback } from "react"
 import calcSubjects from "@/public/CALCULUS.json"
-import CourseItem from "./courseItem"
+import CourseListItem from "./courseListItem"
 import QueryCourses from "./queryCourses"
+import ExpandCourse from "./expandCourse"
 
 const MAX_QUERY_SIZE = 5
 
@@ -76,34 +77,40 @@ export default function AddCourses() {
     }, 500)
   }, [])
 
-  useEffect(() => {
-    console.log("selectedCourse", selectedCourse)
-  }, [selectedCourse])
-
   return (
-    <div className="flex flex-col w-full h-full bg-white rounded-xl drop-shadow-md overflow-clip p-8 space-y-4">
+    <div className="flex flex-col w-full h-full bg-white rounded-xl drop-shadow-md overflow-visible py-6 px-4 space-y-4">
       <h1 className="font-semibold text-xl">Add a class</h1>
-      <QueryCourses runQuery={query} />
-      <div className="flex justify-between font-xs text-slate-300">
-        <p>courses: {courses.length}</p>
-        <p>showCourses: {showCourses.length}</p>
-      </div>
+      {!selectedCourse ? (
+        <>
+          <QueryCourses runQuery={query} />
 
-      <div className="grow p-2 space-y-2 overflow-scroll">
-        <p className="font-light">{prompt}</p>
-        {loaded ? (
-          showCourses.length > 0 &&
-          showCourses.map((course, idx) => (
-            <CourseItem
-              key={course["name"] + course["level"] + course["term"] + idx}
-              course={course}
-              select={setSelectedCourse}
-            />
-          ))
-        ) : (
-          <>Loading...</>
-        )}
-      </div>
+          <div className="flex justify-between font-xs text-slate-300">
+            <p>courses: {courses.length}</p>
+            <p>showCourses: {showCourses.length}</p>
+          </div>
+
+          <div className="grow p-2 space-y-2 overflow-scroll">
+            <p className="font-light">{prompt}</p>
+            {loaded ? (
+              showCourses.length > 0 &&
+              showCourses.map((course, idx) => (
+                <CourseListItem
+                  key={course["name"] + course["level"] + course["term"] + idx}
+                  course={course}
+                  select={setSelectedCourse}
+                />
+              ))
+            ) : (
+              <>Loading...</>
+            )}
+          </div>
+        </>
+      ) : (
+        <ExpandCourse
+          course={selectedCourse}
+          deselect={() => setSelectedCourse(null)}
+        />
+      )}
     </div>
   )
 }
