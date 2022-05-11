@@ -6,72 +6,73 @@ import ExpandCourse from "./expandCourse"
 
 const MAX_QUERY_SIZE = 5
 
-const savedCourses = calcSubjects["Courses"].slice(0, 30).map((course) => {
-  const meta = course["Name"].split("-")
-  const name = meta[1].trim()
-  const subject = meta[0].split(" ")[0]
-  const numCode = meta[0].split(" ")[1]
-  const level = parseInt(numCode.slice(0, 4))
-  const term = numCode.slice(4)
-  const detail = course["Description"]
-  const components = course["Components"]
+const savedCourses: CourseData[] = calcSubjects["Courses"]
+  .slice(0, 30)
+  .map((course) => {
+    const meta = course["Name"].split("-")
+    const name = meta[1].trim()
+    const subject = meta[0].split(" ")[0]
+    const numCode = meta[0].split(" ")[1]
+    const level = parseInt(numCode.slice(0, 4))
+    const term = numCode.slice(4)
+    const detail = course["Description"]
+    const components = course["Components"]
 
-  const data = {
-    name,
-    subject,
-    level,
-    term,
-    detail,
-    components,
-  }
+    const data: CourseData = {
+      name,
+      subject,
+      level,
+      term,
+      detail,
+      components,
+    }
 
-  return data
-})
+    return data
+  })
+
+interface Query {
+  nameQuery: string
+}
 
 export default function AddCourses() {
   const [loaded, setLoaded] = useState(false)
 
-  const [courses, setCourses] = useState([])
-  const [showCourses, setShowCourses] = useState([])
-  const [selectedCourse, setSelectedCourse] = useState(null)
+  const [showCourses, setShowCourses] = useState<CourseData[]>([])
+  const [selectedCourse, setSelectedCourse] = useState<CourseData | null>(null)
 
   const [prompt, setPrompt] = useState("Popular Courses")
 
-  const query = useCallback(
-    ({ nameQuery }) => {
-      console.log("Querying courses...")
-      const findingName = nameQuery !== ""
+  const query = useCallback(({ nameQuery }: Query) => {
+    console.log("Querying courses...")
+    const findingName = nameQuery !== ""
 
-      const result = courses.filter((course) => {
-        const { name } = course
+    const result = savedCourses.filter((course: CourseData) => {
+      const { name } = course
 
-        if (
-          findingName
-            ? name.toUpperCase().indexOf(nameQuery.toUpperCase()) > -1
-            : true
-        )
-          return course
-      })
+      if (
+        findingName
+          ? name.toUpperCase().indexOf(nameQuery.toUpperCase()) > -1
+          : true
+      )
+        return course
+    })
 
-      console.log("Courses found:", result.length)
+    console.log("Courses found:", result.length)
 
-      if (result.length > MAX_QUERY_SIZE) {
-        setShowCourses([])
-        setPrompt(
-          `Query too large (${result.length}), try being more specific...`,
-        )
-        return
-      }
+    if (result.length > MAX_QUERY_SIZE) {
+      setShowCourses([])
+      setPrompt(
+        `Query too large (${result.length}), try being more specific...`,
+      )
+      return
+    }
 
-      setShowCourses(result)
-      setPrompt(`Found ${result.length} course${result.length == 1 ? "" : "s"}`)
-    },
-    [courses],
-  )
+    setShowCourses(result)
+    setPrompt(`Found ${result.length} course${result.length == 1 ? "" : "s"}`)
+  }, [])
 
   useEffect(() => {
     setTimeout(() => {
-      setCourses(savedCourses)
       setShowCourses(savedCourses.slice(0, 5))
       setLoaded(true)
     }, 500)
@@ -85,7 +86,7 @@ export default function AddCourses() {
           <QueryCourses runQuery={query} />
 
           <div className="flex justify-between font-xs text-slate-300">
-            <p>courses: {courses.length}</p>
+            <p>courses: {savedCourses.length}</p>
             <p>showCourses: {showCourses.length}</p>
           </div>
 
@@ -93,7 +94,7 @@ export default function AddCourses() {
             <p className="font-light">{prompt}</p>
             {loaded ? (
               showCourses.length > 0 &&
-              showCourses.map((course, idx) => (
+              showCourses.map((course: CourseData, idx: number) => (
                 <CourseListItem
                   key={course["name"] + course["level"] + course["term"] + idx}
                   course={course}

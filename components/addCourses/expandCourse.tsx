@@ -1,6 +1,6 @@
-import { addCourse, useSearchCourses } from "@features/activeTT"
+import { addCourse, removeCourse, useSearchCourses } from "@features/activeTT"
 import { useMemo } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import ComponentItem from "./componentListItem"
 
 const closeSVG = (
@@ -20,18 +20,28 @@ const closeSVG = (
   </svg>
 )
 
-export default function ExpandCourse({ course, deselect }) {
+interface ExpandCourseProps {
+  course: CourseData
+  deselect: Function
+}
+
+export default function ExpandCourse({ course, deselect }: ExpandCourseProps) {
   const { name, subject, level, term, detail, components } = useMemo(
     () => course,
     [course],
   )
 
-  const { courses } = useSelector((store) => store.activeTT.value)
   const search = useSearchCourses()
   const dispatch = useDispatch()
 
-  const add = (component) => {
-    dispatch(addCourse({ title: name, component }))
+  const add = (component: Component) => {
+    const course: Course = { title: name, component }
+    dispatch(addCourse(course))
+  }
+
+  const remove = (component: Component) => {
+    const course: Course = { title: name, component }
+    dispatch(removeCourse(course))
   }
 
   return (
@@ -59,16 +69,19 @@ export default function ExpandCourse({ course, deselect }) {
         </button>
       </div>
       <div className="grow py-3 space-y-3 overflow-x-visible overflow-y-scroll">
-        {components.map((component, idx) => {
-          const _component = { ...component }
-          const [_, found] = search({ title: name, component })
-          _component.inTT = found
+        {components.map((component: Component, idx: number) => {
+          const [_, found]: any = search({
+            title: name,
+            component,
+          })
 
           return (
             <ComponentItem
               add={() => add(component)}
+              remove={() => remove(component)}
               key={idx}
-              component={_component}
+              inTT={found}
+              component={component}
             />
           )
         })}

@@ -1,17 +1,25 @@
-import { createSlice } from "@reduxjs/toolkit"
-import { useSelector } from "react-redux"
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { useAppSelector } from "@hooks/redux"
+
+interface activeTTState {
+  value: Timetable
+}
+
+const initialState: activeTTState = {
+  value: { name: "", courses: [] },
+}
 
 export const activeTTSlice = createSlice({
   name: "activeTT",
-  initialState: { value: { name: "", courses: [] } },
+  initialState,
   reducers: {
-    setTT: (state, action) => {
+    setTT: (state: activeTTState, action: PayloadAction<Timetable>) => {
       state.value = action.payload
     },
-    addCourse: (state, action) => {
+    addCourse: (state: activeTTState, action: PayloadAction<Course>) => {
       state.value["courses"].push(action.payload)
     },
-    removeCourse: (state, action) => {
+    removeCourse: (state: activeTTState, action: PayloadAction<Course>) => {
       const updatedCourses = state.value["courses"].filter(
         (course) => JSON.stringify(course) !== JSON.stringify(action.payload),
       )
@@ -20,14 +28,13 @@ export const activeTTSlice = createSlice({
   },
 })
 
-export const { setTT, addCourse, removeCourse, isInTimetable } =
-  activeTTSlice.actions
+export const { setTT, addCourse, removeCourse } = activeTTSlice.actions
 
 export default activeTTSlice.reducer
 
 export const useSearchCourses = () => {
-  const { courses } = useSelector((store) => store.activeTT.value)
-  const search = ({ title, component }) => {
+  const { courses } = useAppSelector((store) => store.activeTT.value)
+  const search = ({ title, component }: Course) => {
     const course = courses.find(
       (course) =>
         course["title"] === title && course["component"] === component,

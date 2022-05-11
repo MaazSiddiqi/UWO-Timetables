@@ -1,9 +1,22 @@
-import { useCallback, useEffect } from "react"
-import { useSelector } from "react-redux"
+import { useState } from "react"
 
 const daysTemplate = ["M", "Tu", "W", "Th", "F"]
 
-export default function ComponentListItem({ component, add }) {
+interface ComponentListItemProps {
+  add: Function
+  remove: Function
+  component: Component
+  inTT: boolean
+}
+
+export default function ComponentListItem({
+  component,
+  inTT,
+  add,
+  remove,
+}: ComponentListItemProps) {
+  const [focused, setFocused] = useState<boolean>(false)
+
   const {
     Section: section,
     Component: type,
@@ -19,40 +32,29 @@ export default function ComponentListItem({ component, add }) {
     Delivery: delivery,
   } = component
 
-  const formatDays = useCallback((_days) => {
-    const res = daysTemplate.map((day) =>
-      _days.indexOf(day) === -1 ? "_" : day,
-    )
-    return res
-  }, [])
-
   return (
     <div
-      onMouseUp={() => !component.inTT && add()}
+      onMouseDown={() => setFocused(true)}
+      onMouseLeave={() => focused && setFocused(false)}
+      onMouseUp={() => {
+        if (!focused) return
+        !inTT ? add() : remove()
+        setFocused(false)
+      }}
       className={`w-full text-sm ${
-        component.inTT ? "bg-green-100 " : "bg-white cursor-pointer "
-      } rounded-xl shadow-md p-3 btn`}
+        inTT && !focused
+          ? "bg-green-100 "
+          : focused
+          ? inTT
+            ? "bg-red-200"
+            : "bg-gray-50"
+          : "bg-white"
+      } rounded-xl shadow-md p-3 btn cursor-pointer`}
     >
       <div className="flex justify-between">
-        <div className="flex items-center space-x-1">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4 btn hover:text-green-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <h3 className="font-semibold">
-            {type} {section}
-          </h3>
-        </div>
+        <h3 className="font-semibold px-4">
+          {type} {section}
+        </h3>
         <div className="flex justify-between w-2/5 font-mono text-center">
           {delivery !== "In Person" ? (
             <p className="w-full text-gray-400 text-center">{delivery}</p>

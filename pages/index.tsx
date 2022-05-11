@@ -1,13 +1,13 @@
 import Head from "next/head"
 import { useEffect, useState } from "react"
-import { useSelector, useDispatch } from "react-redux"
+import { useAppDispatch, useAppSelector } from "@hooks/redux"
 import { login } from "@features/user"
 import { setTT } from "@features/activeTT"
 import Timetable from "@/components/timetableGraph/timetable"
 import AddCourses from "@/components/addCourses/addCourse"
 import calcSubjects from "../public/CALCULUS.json"
 
-const sampleUser = {
+const sampleUser: User = {
   name: "Maaz Siddiqi",
   timetables: [
     {
@@ -37,12 +37,12 @@ const sampleUser = {
 export default function Home() {
   const [loaded, setLoaded] = useState(false)
 
-  const user = useSelector((state) => state.user.value)
-  const { name: activeName, courses: activeCourses } = useSelector(
+  const user = useAppSelector((state) => state.user.value)
+  const { name: activeName, courses: activeCourses } = useAppSelector(
     (state) => state.activeTT.value,
   )
 
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     setTimeout(() => {
@@ -51,14 +51,6 @@ export default function Home() {
       setLoaded(true)
     }, 500)
   }, [dispatch, user, user.timetables])
-
-  // const addComponent = (newComponent) => {
-  //   console.log(`Adding course: ${newComponent}`)
-  //   setActiveTT((prev) => ({
-  //     ...prev,
-  //     courses: [...prev["courses"], newComponent],
-  //   }))
-  // }
 
   return (
     <>

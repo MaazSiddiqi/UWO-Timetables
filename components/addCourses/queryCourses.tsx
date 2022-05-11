@@ -1,6 +1,14 @@
 import { useState } from "react"
 
-export default function QueryCourses({ runQuery }) {
+interface Query {
+  nameQuery: string
+}
+
+interface QueryCoursesProps {
+  runQuery: ({ nameQuery }: Query) => void
+}
+
+export default function QueryCourses({ runQuery }: QueryCoursesProps) {
   const [nameQuery, setNameQuery] = useState("")
   return (
     <form

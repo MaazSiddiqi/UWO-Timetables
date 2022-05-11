@@ -1,6 +1,14 @@
-import { useMemo } from "react"
+import { Dispatch, SetStateAction, useMemo } from "react"
 
-export default function CourseListItem({ course, select, children }) {
+interface CourseListItemProps {
+  course: CourseData
+  select: Dispatch<SetStateAction<CourseData | null>>
+}
+
+export default function CourseListItem({
+  course,
+  select,
+}: CourseListItemProps) {
   const { subject, name, level, term, components } = useMemo(
     () => course,
     [course],

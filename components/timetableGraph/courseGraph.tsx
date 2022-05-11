@@ -1,26 +1,7 @@
-import { useMemo, useState, useEffect, useCallback } from "react"
 import { removeCourse } from "@features/activeTT"
-import { useDispatch, useSelector } from "react-redux"
+import { useCallback, useEffect, useMemo, useState } from "react"
+import { useAppDispatch } from "@hooks/redux"
 import ClassNode from "./classNode"
-
-// Sample Component:
-// {
-//     "Section": "570",
-//     "Component": "LEC",
-//     "Class Nbr": "3135",
-//     "Days": ["W", "F"],
-//     "Start Time": "8:30 AM",
-//     "End Time": "10:30 AM",
-//     "Location": "KC-LH103",
-//     "Instructor": "T. Pattenden",
-//     "Notes": [
-//       "RESTRICTED TO STUDENTS REGISTERED AT AN AFFILIATED UNIVERSITY COLLEGE. ",
-//       "REQUISITES: Prerequisite(s): Ontario Secondary School MCV4U or Mathematics 0110A/B."
-//     ],
-//     "Status": "Not Full",
-//     "Campus": "King's",
-//     "Delivery": "In Person"
-// }
 
 const daysValues = ["M", "Tu", "W", "Th", "F"]
 const hourValues = [
@@ -56,43 +37,40 @@ const hourValues = [
   "9:30 PM",
 ]
 
-export default function CourseGraph({ name, data }) {
-  const [position, setPosition] = useState(null)
+interface CourseGraphProps {
+  name: string
+  data: Component
+}
 
-  const { courses } = useSelector((state) => state.activeTT.value)
-  const dispatch = useDispatch()
+export default function CourseGraph({ name, data }: CourseGraphProps) {
+  const [position, setPosition] = useState<any>(null)
+  const dispatch = useAppDispatch()
 
   const {
-    Section: section,
-    Component: type,
-    "Class Nbr": classNbr,
     Days: days,
     "Start Time": startTime,
     "End Time": endTime,
-    Location: location,
-    Instructor: prof,
-    Notes: notes,
-    Status: status,
-    Campus: campus,
-    Delivery: delivery,
   } = useMemo(() => data, [data])
+
+  const getCourse = useCallback((): Course => {
+    return { title: name, component: data }
+  }, [data, name])
 
   const remove = useCallback(() => {
     if (!position) return null
-
-    console.log(`Removing ${name}...`)
-    dispatch(removeCourse({ title: name, component: data }))
-  }, [data, dispatch, name, position])
+    const course: Course = getCourse()
+    dispatch(removeCourse(course))
+  }, [dispatch, getCourse, position])
 
   useEffect(() => {
-    const getRows = (startTime, endTime) => {
+    const getRows = (startTime: string, endTime: string) => {
       const start = hourValues.indexOf(startTime) + 2
       const end = hourValues.indexOf(endTime) + 2
 
       return { start, end }
     }
 
-    const getCols = (days) => {
+    const getCols = (days: string[]) => {
       const cols = days.map((day) => daysValues.indexOf(day) + 2)
       return cols
     }
@@ -110,7 +88,7 @@ export default function CourseGraph({ name, data }) {
   return (
     <>
       {position &&
-        position["x"].map((col, idx) => (
+        position["x"].map((col: any, idx: number) => (
           <ClassNode
             remove={remove}
             key={name + idx}
@@ -118,9 +96,7 @@ export default function CourseGraph({ name, data }) {
             end={position["y"]["end"]}
             day={col}
             name={name}
-            type={type}
-            section={section}
-            location={location}
+            data={data}
           />
         ))}
     </>
