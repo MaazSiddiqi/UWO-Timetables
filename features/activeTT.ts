@@ -16,6 +16,9 @@ export const activeTTSlice = createSlice({
     setTT: (state: activeTTState, action: PayloadAction<Timetable>) => {
       state.value = action.payload
     },
+    setName: (state: activeTTState, action: PayloadAction<string>) => {
+      state.value.name = action.payload
+    },
     addCourse: (state: activeTTState, action: PayloadAction<Course>) => {
       state.value["courses"].push(action.payload)
     },
@@ -28,7 +31,7 @@ export const activeTTSlice = createSlice({
   },
 })
 
-export const { setTT, addCourse, removeCourse } = activeTTSlice.actions
+export const { setTT, addCourse, removeCourse, setName } = activeTTSlice.actions
 
 export default activeTTSlice.reducer
 

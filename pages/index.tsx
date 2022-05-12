@@ -2,7 +2,7 @@ import Head from "next/head"
 import { useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "@hooks/redux"
 import { login } from "@features/user"
-import { setTT } from "@features/activeTT"
+import { setTT, setName } from "@features/activeTT"
 import Timetable from "@/components/timetableGraph/timetable"
 import AddCourses from "@/components/addCourses/addCourse"
 import calcSubjects from "../public/CALCULUS.json"
@@ -64,11 +64,13 @@ export default function Home() {
         </div>
 
         <div
-          className={`flex flex-col space-y-2 overflow-hidden p-4 text-center drop-shadow-md rounded-2xl w-10/12 bg-white`}
+          className={`flex flex-col justify-center items-center space-y-2 overflow-hidden p-4 text-center drop-shadow-md rounded-2xl w-10/12 bg-white`}
         >
           {loaded ? (
             <>
-              <h1 className="text-2xl font-semibold">{activeName}</h1>
+              <h1 className="w-fit py-1 px-3 rounded-xl text-2xl font-semibold btn">
+                {activeName}
+              </h1>
               <Timetable courses={activeCourses} />
             </>
           ) : (

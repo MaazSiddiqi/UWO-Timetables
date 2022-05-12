@@ -44,6 +44,8 @@ interface CourseGraphProps {
 
 export default function CourseGraph({ name, data }: CourseGraphProps) {
   const [position, setPosition] = useState<any>(null)
+  const [isHovering, setIsHovering] = useState(false)
+  const [isActive, setIsActive] = useState(false)
   const dispatch = useAppDispatch()
 
   const {
@@ -91,6 +93,10 @@ export default function CourseGraph({ name, data }: CourseGraphProps) {
         position["x"].map((col: any, idx: number) => (
           <ClassNode
             remove={remove}
+            emitHover={setIsHovering}
+            hover={isHovering}
+            emitActive={setIsActive}
+            active={isActive}
             key={name + idx}
             start={position["y"]["start"]}
             end={position["y"]["end"]}

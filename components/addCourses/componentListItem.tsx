@@ -43,10 +43,10 @@ export default function ComponentListItem({
       }}
       className={`w-full text-sm ${
         inTT && !focused
-          ? "bg-green-100 "
+          ? "bg-green-50 "
           : focused
           ? inTT
-            ? "bg-red-200"
+            ? "bg-red-100"
             : "bg-gray-50"
           : "bg-white"
       } rounded-xl shadow-md p-3 btn cursor-pointer`}
@@ -55,32 +55,43 @@ export default function ComponentListItem({
         <h3 className="font-semibold px-4">
           {type} {section}
         </h3>
-        <div className="flex justify-between w-2/5 font-mono text-center">
-          {delivery !== "In Person" ? (
-            <p className="w-full text-gray-400 text-center">{delivery}</p>
-          ) : (
-            daysTemplate.map((day, idx) =>
-              days.indexOf(day) > -1 ? (
-                <p
-                  key={day + idx}
-                  className={`px-1 noselect
-                      ${idx === 0 && "text-orange-400"} 
-                      ${idx === 1 && "text-lime-400"} 
-                      ${idx === 2 && "text-teal-400"} 
-                      ${idx === 3 && "text-violet-400"} 
-                      ${idx === 4 && "text-pink-400"} `}
-                >
-                  {day}
-                </p>
-              ) : (
-                <p
-                  key={day + idx}
-                  className="px-1 text-gray-200 text-opacity-60"
-                >
-                  {day}
-                </p>
-              ),
-            )
+        <div className="w-2/5 space-y-1 select-none">
+          <div className="flex justify-between w-full font-mono text-center">
+            {delivery !== "In Person" ? (
+              <p className="w-full h-6 text-gray-400 text-center select-none">
+                {delivery}
+              </p>
+            ) : (
+              daysTemplate.map((day, idx) =>
+                days.indexOf(day) > -1 ? (
+                  <p
+                    key={day + idx}
+                    className={`px-1 noselect
+                        ${idx === 0 && "text-orange-400"}
+                        ${idx === 1 && "text-lime-400"}
+                        ${idx === 2 && "text-teal-400"}
+                        ${idx === 3 && "text-violet-400"}
+                        ${idx === 4 && "text-pink-400"} `}
+                  >
+                    {day}
+                  </p>
+                ) : (
+                  <p
+                    key={day + idx}
+                    className="px-1 text-gray-200 text-opacity-60"
+                  >
+                    {day}
+                  </p>
+                ),
+              )
+            )}
+          </div>
+          {delivery === "In Person" && (
+            <div className="flex text-right justify-evenly font-mono font-light text-slate-400">
+              <p>{startTime}</p>
+              <p>-</p>
+              <p>{endTime}</p>
+            </div>
           )}
         </div>
       </div>

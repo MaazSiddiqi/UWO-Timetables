@@ -55,18 +55,18 @@ export default function QueryCourses({ runQuery }: QueryCoursesProps) {
           maxLength={4}
         />
         <select
-          className="w-2/12 py-2 px-3 appearance-none drop-shadow-md rounded-lg outline-0 hover:drop-shadow-lg hover:scale-[1.025] focus:scale-[1.025] active:scale-[1.025] transition-transform duration-200"
+          className="w-2/12 py-2 px-3 appearance-none drop-shadow-md rounded-lg outline-0 hover:drop-shadow-lg hover:scale-[1.025] focus:scale-[1.025] focus:drop-shadow-lg active:scale-[1.025] active:drop-shadow-lg focus-within:scale-[1.025] focus-within:drop-shadow-lg transition-transform duration-200"
           value={termQuery}
           onChange={(e) => setTermQuery(e.target.value)}
         >
-          <option value="">Term</option>
+          <option value=""></option>
           <option value="A">A</option>
           <option value="B">B</option>
         </select>
       </div>
       <input
         type="text"
-        className="w-full py-2 px-3 drop-shadow-md rounded-lg outline-0 hover:drop-shadow-lg hover:scale-[1.025] focus:scale-[1.025] active:scale-[1.025] transition-transform duration-200"
+        className="w-full py-2 px-3 drop-shadow-md rounded-lg outline-0 hover:drop-shadow-lg hover:scale-[1.025] focus:scale-[1.025] focus:drop-shadow-lg active:scale-[1.025] active:drop-shadow-lg focus-within:scale-[1.025] focus-within:drop-shadow-lg transition-transform duration-200"
         value={nameQuery}
         onChange={(e) => setNameQuery(e.target.value)}
         placeholder="course title"
@@ -74,7 +74,7 @@ export default function QueryCourses({ runQuery }: QueryCoursesProps) {
 
       <button
         type="submit"
-        className="font-mono font-light px-4 py-2 rounded-full border-2 hover:shadow-lg hover:scale-[1.025] transition-all duration-200 active:scale-95 "
+        className="font-mono font-light px-4 py-2 rounded-full border-2 hover:drop-shadow-lg hover:scale-[1.025] focus:scale-[1.025] focus:drop-shadow-lg active:scale-[1.025] active:drop-shadow-lg focus-within:scale-[1.025] focus-within:drop-shadow-lg transition-transform duration-200"
       >
         query
       </button>
