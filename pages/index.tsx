@@ -1,10 +1,11 @@
+import AddCourses from "@/components/addCourses/addCourse"
+import Timetable from "@/components/timetableGraph/timetable"
+import TTName from "@/components/timetableGraph/TTName"
+import { setTT, setName } from "@features/activeTT"
+import { login } from "@features/user"
+import { useAppDispatch, useAppSelector } from "@hooks/redux"
 import Head from "next/head"
 import { useEffect, useState } from "react"
-import { useAppDispatch, useAppSelector } from "@hooks/redux"
-import { login } from "@features/user"
-import { setTT, setName } from "@features/activeTT"
-import Timetable from "@/components/timetableGraph/timetable"
-import AddCourses from "@/components/addCourses/addCourse"
 import calcSubjects from "../public/CALCULUS.json"
 
 const sampleUser: User = {
@@ -68,9 +69,10 @@ export default function Home() {
         >
           {loaded ? (
             <>
-              <h1 className="w-fit py-1 px-3 rounded-xl text-2xl font-semibold btn">
-                {activeName}
-              </h1>
+              <TTName
+                name={activeName}
+                setName={(name: string) => dispatch(setName(name))}
+              />
               <Timetable courses={activeCourses} />
             </>
           ) : (

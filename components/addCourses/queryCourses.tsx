@@ -55,11 +55,13 @@ export default function QueryCourses({ runQuery }: QueryCoursesProps) {
           maxLength={4}
         />
         <select
-          className="w-2/12 py-2 px-3 appearance-none drop-shadow-md rounded-lg outline-0 hover:drop-shadow-lg hover:scale-[1.025] focus:scale-[1.025] focus:drop-shadow-lg active:scale-[1.025] active:drop-shadow-lg focus-within:scale-[1.025] focus-within:drop-shadow-lg transition-transform duration-200"
+          className={`w-2/12 py-2 px-3 ${
+            termQuery === "" && "text-gray-400"
+          } appearance-none drop-shadow-md rounded-lg outline-0 hover:drop-shadow-lg hover:scale-[1.025] focus:scale-[1.025] focus:drop-shadow-lg active:scale-[1.025] active:drop-shadow-lg focus-within:scale-[1.025] focus-within:drop-shadow-lg transition-transform duration-200`}
           value={termQuery}
           onChange={(e) => setTermQuery(e.target.value)}
         >
-          <option value=""></option>
+          <option value="">term</option>
           <option value="A">A</option>
           <option value="B">B</option>
         </select>
