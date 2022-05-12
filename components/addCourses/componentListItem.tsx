@@ -38,10 +38,10 @@ export default function ComponentListItem({
       onMouseLeave={() => focused && setFocused(false)}
       onMouseUp={() => {
         if (!focused) return
-        !inTT ? add() : remove()
+        !inTT && status !== "Full" ? add() : remove()
         setFocused(false)
       }}
-      className={`w-full text-sm ${
+      className={`relative w-full text-sm ${
         inTT && !focused
           ? "bg-green-50 "
           : focused
@@ -51,11 +51,15 @@ export default function ComponentListItem({
           : "bg-white"
       } rounded-xl shadow-md p-3 btn cursor-pointer`}
     >
-      <div className="flex justify-between">
+      <div
+        className={`flex items-center justify-between ${
+          status === "Full" && "opacity-25"
+        }`}
+      >
         <h3 className="font-semibold px-4">
           {type} {section}
         </h3>
-        <div className="w-2/5 space-y-1 select-none">
+        <div className="w-2/5 space-y-1 select-none px-3">
           <div className="flex justify-between w-full font-mono text-center">
             {delivery !== "In Person" ? (
               <p className="w-full h-6 text-gray-400 text-center select-none">
@@ -94,6 +98,13 @@ export default function ComponentListItem({
             </div>
           )}
         </div>
+      </div>
+      <div
+        className={`absolute grid place-items-center w-full h-full top-0 left-0 rounded-xl bg-slate-50/50 ${
+          status !== "Full" && "hidden"
+        }`}
+      >
+        <h1 className="font-mono text-lg text-gray-500">full</h1>
       </div>
     </div>
   )
