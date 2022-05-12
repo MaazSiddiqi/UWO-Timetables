@@ -59,7 +59,7 @@ export default function Home() {
       </Head>
 
       <div className="flex space-x-5 w-screen h-screen p-8 bg-slate-50">
-        <div className="w-1/3">
+        <div className="w-7/12">
           <AddCourses />
         </div>
 

@@ -31,7 +31,10 @@ const savedCourses: CourseData[] = calcSubjects["Courses"]
   })
 
 interface Query {
-  nameQuery: string
+  subjectQuery: string | null
+  levelQuery: number | null
+  termQuery: "A" | "B" | null
+  nameQuery: string | null
 }
 
 export default function AddCourses() {
@@ -42,34 +45,49 @@ export default function AddCourses() {
 
   const [prompt, setPrompt] = useState("Popular Courses")
 
-  const query = useCallback(({ nameQuery }: Query) => {
-    console.log("Querying courses...")
-    const findingName = nameQuery !== ""
+  const query = useCallback(
+    ({ subjectQuery, levelQuery, termQuery, nameQuery }: Query) => {
+      console.log("Querying courses...")
+      const findingSubject = subjectQuery !== null
+      const findingLevel = levelQuery !== null
+      const findingTerm = termQuery !== null
+      const findingName = nameQuery !== null
 
-    const result = savedCourses.filter((course: CourseData) => {
-      const { name } = course
+      const result = savedCourses.filter((course: CourseData) => {
+        const { subject, level, term, name } = course
 
-      if (
-        findingName
-          ? name.toUpperCase().indexOf(nameQuery.toUpperCase()) > -1
-          : true
-      )
-        return course
-    })
+        if (
+          (findingSubject
+            ? subject.toUpperCase().indexOf(subjectQuery.toUpperCase()) > -1
+            : true) &&
+          (findingLevel
+            ? level.toString().indexOf(levelQuery.toString()) > -1
+            : true) &&
+          (findingTerm
+            ? term.toUpperCase() === termQuery.toUpperCase()
+            : true) &&
+          (findingName
+            ? name.toUpperCase().indexOf(nameQuery.toUpperCase()) > -1
+            : true)
+        )
+          return course
+      })
 
-    console.log("Courses found:", result.length)
+      console.log("Courses found:", result.length)
 
-    if (result.length > MAX_QUERY_SIZE) {
-      setShowCourses([])
-      setPrompt(
-        `Query too large (${result.length}), try being more specific...`,
-      )
-      return
-    }
+      if (result.length > MAX_QUERY_SIZE) {
+        setShowCourses([])
+        setPrompt(
+          `Query too large (${result.length}), try being more specific...`,
+        )
+        return
+      }
 
-    setShowCourses(result)
-    setPrompt(`Found ${result.length} course${result.length == 1 ? "" : "s"}`)
-  }, [])
+      setShowCourses(result)
+      setPrompt(`Found ${result.length} course${result.length == 1 ? "" : "s"}`)
+    },
+    [],
+  )
 
   useEffect(() => {
     setTimeout(() => {

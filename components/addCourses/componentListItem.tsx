@@ -63,7 +63,7 @@ export default function ComponentListItem({
               days.indexOf(day) > -1 ? (
                 <p
                   key={day + idx}
-                  className={`px-1
+                  className={`px-1 noselect
                       ${idx === 0 && "text-orange-400"} 
                       ${idx === 1 && "text-lime-400"} 
                       ${idx === 2 && "text-teal-400"} 
