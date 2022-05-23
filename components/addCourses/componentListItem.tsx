@@ -46,20 +46,30 @@ export default function ComponentListItem({
           ? "bg-green-50 "
           : focused
           ? inTT
-            ? "bg-red-100"
-            : "bg-gray-50"
+            ? "bg-red-100 select-none"
+            : "bg-gray-50 select-none"
           : "bg-white"
-      } rounded-xl shadow-md p-3 btn cursor-pointer`}
+      } rounded-xl shadow-md p-3 px-7 btn cursor-pointer`}
     >
       <div
         className={`flex items-center justify-between ${
-          status === "Full" && "opacity-25"
+          status === "Full" && "opacity-30"
         }`}
       >
-        <h3 className="font-semibold px-4">
-          {type} {section}
-        </h3>
-        <div className="w-2/5 space-y-1 select-none px-3">
+        <div className="flex flex-col space-y-1">
+          <h3 className="font-semibold">
+            {type} {section}
+          </h3>
+          <div className="text-xs">
+            <p>
+              {location}{" "}
+              <span className="text-gray-400">
+                {location && "|"} {campus}
+              </span>
+            </p>
+          </div>
+        </div>
+        <div className="w-/5 space-y-1 select-none">
           <div className="flex justify-between w-full font-mono text-center">
             {delivery !== "In Person" ? (
               <p className="w-full h-6 text-gray-400 text-center select-none">
@@ -100,12 +110,30 @@ export default function ComponentListItem({
         </div>
       </div>
       <div
-        className={`absolute grid place-items-center w-full h-full top-0 left-0 rounded-xl bg-slate-50/50 ${
-          status !== "Full" && "hidden"
-        }`}
+        className={`absolute grid place-items-center w-full h-full top-0 left-0 rounded-xl ${
+          !focused
+            ? "bg-slate-50/50 text-gray-500"
+            : "bg-red-50/50 text-red-400 "
+        } ${status !== "Full" && "hidden"}`}
       >
-        <h1 className="font-mono text-lg text-gray-500">full</h1>
+        <h1 className="font-mono text-lg select-none">full</h1>
       </div>
+      {notes && (
+        <div
+          className={`w-full pt-1 ${
+            status !== "Full" ? "text-red-400" : "text-red-400/50"
+          } overflow-x-scroll space-y-[0.125rem]`}
+        >
+          {notes.map((note, idx) => (
+            <p
+              key={idx}
+              className="w-full overflow-x-scroll flex flex-col text-[70%] [line-height:_13px]"
+            >
+              {note}
+            </p>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

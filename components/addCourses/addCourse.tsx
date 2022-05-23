@@ -109,7 +109,7 @@ export default function AddCourses() {
           </div>
 
           <div className="grow p-2 space-y-2 overflow-scroll">
-            <p className="font-light">{prompt}</p>
+            <p className="font-light font-mono">{prompt}</p>
             {loaded ? (
               showCourses.length > 0 &&
               showCourses.map((course: CourseData, idx: number) => (

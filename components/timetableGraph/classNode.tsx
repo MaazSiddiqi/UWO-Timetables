@@ -53,7 +53,7 @@ export default function ClassNode({
         hover
           ? active
             ? "scale-95 bg-red-100"
-            : "scale-105 bg-slate-50/25"
+            : "scale-105 bg-slate-100"
           : "scale-100 bg-slate-200/25"
       } shadow-md transition-all duration-200`}
     >

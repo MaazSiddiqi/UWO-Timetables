@@ -45,7 +45,7 @@ export default function ExpandCourse({ course, deselect }: ExpandCourseProps) {
   }
 
   return (
-    <div className="flex flex-col w-full h-full py-1 px-2 space-y-5 overflow-y-hidden">
+    <div className="flex flex-col w-full h-full py-1 px-2 space-y-5 overflow-hidden">
       <div className="flex items-center justify-between">
         <div className="flex flex-col">
           <h1 className="font-semibold">
@@ -68,7 +68,7 @@ export default function ExpandCourse({ course, deselect }: ExpandCourseProps) {
           {closeSVG}
         </button>
       </div>
-      <div className="grow py-3 space-y-3 overflow-x-visible overflow-y-scroll">
+      <div className="grow py-3 space-y-3 overflow-x-hidden overflow-y-scroll">
         {components.map((component: Component, idx: number) => {
           const [_, found]: any = search({
             title: name,
