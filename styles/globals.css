@@ -18,6 +18,9 @@
   .input {
     @apply drop-shadow-md rounded-lg outline-0 hover:drop-shadow-lg hover:scale-[1.025] focus:scale-[1.025] focus:drop-shadow-lg active:scale-[1.025] active:drop-shadow-lg focus-within:scale-[1.025] focus-within:drop-shadow-lg transition-transform duration-200;
   }
+  .list-item {
+    @apply py-2 px-2 select-none cursor-pointer font-mono text-sm text-slate-600 hover:bg-gray-100 hover:px-3 transition-all duration-150;
+  }
 }
 
 .noselect {
