@@ -9,11 +9,11 @@ export default function Navbar() {
       <h1 className="font-mono text-2xl btn bg-gradient-to-br from-fuchsia-500 to-violet-500 bg-clip-text text-transparent px-2 py-1 rounded-lg select-none">
         uPlanned.
       </h1>
-      <UserProfile
+      {/* <UserProfile
         name={"Maaz Siddiqi"}
         img={"https://github.com/MaazSiddiqi.png"}
-      />
-      {/* {session ? (
+      /> */}
+      {session ? (
         <UserProfile name={session.user?.name} img={session.user?.image} />
       ) : (
         <button
@@ -22,7 +22,7 @@ export default function Navbar() {
         >
           login
         </button>
-      )} */}
+      )}
     </nav>
   )
 }

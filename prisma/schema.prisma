@@ -43,6 +43,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  Profile       Profile?
 }
 
 model VerificationToken {
@@ -51,4 +52,91 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Profile {
+  id          String      @id @default(cuid())
+  user        User        @relation(fields: [userId], references: [id])
+  userId      String      @unique
+  username    String      @unique
+  dateCreated DateTime
+  timetables  Timetable[]
+}
+
+model Timetable {
+  id           String    @id @default(cuid())
+  Profile      Profile   @relation(fields: [profileId], references: [id])
+  profileId    String
+  name         String    @unique
+  dateCreated  DateTime
+  lastModified DateTime?
+  classes      Class[]
+}
+
+model Subject {
+  code    String   @id @default(cuid())
+  name    String
+  courses Course[]
+}
+
+model Course {
+  id          String  @id @default(cuid())
+  title       String
+  level       Int
+  detail      String?
+  Subject     Subject @relation(fields: [subjectCode], references: [code])
+  subjectCode String
+  classes     Class[]
+}
+
+model Class {
+  id          String      @id @default(cuid())
+  section     Int
+  type        Type
+  classNumber Int?
+  days        Day[]
+  startTime   String
+  endTime     String
+  location    String
+  prof        String
+  notes       String[]
+  status      Status
+  campus      Campus
+  delivery    Delivery
+  Course      Course      @relation(fields: [courseId], references: [id])
+  courseId    String
+  Timetable   Timetable[]
+}
+
+enum Type {
+  LEC
+  LAB
+  TUT
+}
+
+enum Day {
+  M
+  Tu
+  W
+  Th
+  F
+}
+
+enum Status {
+  FULL
+  NOT_FULL
+}
+
+enum Campus {
+  MAIN
+  HURON
+  KINGS
+  BRESCIA
+}
+
+enum Delivery {
+  IN_PERSON
+  BLENDED
+  ONLINE
+  OTHER
 }
