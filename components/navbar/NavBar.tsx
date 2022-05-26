@@ -1,5 +1,5 @@
-import UserProfile from "./userProfile"
 import { useSession, signIn, signOut } from "next-auth/react"
+import UserProfile from "./userProfile"
 
 export default function Navbar() {
   const { data: session } = useSession()
@@ -17,7 +17,7 @@ export default function Navbar() {
         <UserProfile name={session.user?.name} img={session.user?.image} />
       ) : (
         <button
-          onClick={() => signIn()}
+          onClick={() => signIn(undefined, { callbackUrl: "/dashboard" })}
           className="btn bg-purple-500 px-4 py-1 rounded-full text-slate-100 text-center text-sm font-mono font-light hover:bg-white hover:text-slate-800 active:shadow-inner active:bg-gray-100 transition-all duration-150"
         >
           login
