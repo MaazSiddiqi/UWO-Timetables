@@ -1,3 +1,17 @@
+import { Profile } from "@prisma/client"
+import NextAuth, { DefaultSession } from "next-auth"
+
+declare module "next-auth" {
+  /**
+   * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
+   */
+  interface Session {
+    user: {
+      profile: Profile
+    } & DefaultSession["user"]
+  }
+}
+
 interface User {
   name: string
   timetables: Timetable[]

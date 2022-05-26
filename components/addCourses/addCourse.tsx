@@ -3,6 +3,7 @@ import calcSubjects from "@/public/CALCULUS.json"
 import CourseListItem from "./courseListItem"
 import QueryCourses from "./queryCourses"
 import ExpandCourse from "./expandCourse"
+import { CourseData } from "additional"
 
 const MAX_QUERY_SIZE = 5
 
