@@ -10,7 +10,7 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ profile }: DashboardProps) {
-  const { id, email, username, timetables } = useMemo(() => profile, [profile])
+  const { id, email, username } = useMemo(() => profile, [profile])
 
   return (
     <section className="flex flex-col grow p-8 space-y-8">

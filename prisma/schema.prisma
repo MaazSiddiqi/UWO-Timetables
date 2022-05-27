@@ -65,7 +65,7 @@ model Profile {
 
 model Timetable {
   id           String             @id @default(cuid())
-  Profile      Profile            @relation(fields: [profileId], references: [id])
+  Profile      Profile            @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId    String
   name         String
   dateCreated  DateTime
@@ -80,11 +80,12 @@ model Subject {
 }
 
 model Course {
-  id          String  @id @default(cuid())
+  id          String   @id @default(cuid())
   title       String
   level       Int
-  detail      String?
-  Subject     Subject @relation(fields: [subjectCode], references: [code])
+  term        String
+  detail      String[]
+  Subject     Subject  @relation(fields: [subjectCode], references: [code])
   subjectCode String
   classes     Class[]
 }
