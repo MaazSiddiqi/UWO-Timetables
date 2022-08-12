@@ -1,4 +1,4 @@
-import prisma from "@lib/prismaClient"
+import prisma from "@/lib/prismaClient"
 import { Profile } from "@prisma/client"
 import { NextApiRequest, NextApiResponse } from "next/types"
 
@@ -23,7 +23,6 @@ export default async function handler(
       break
     case "POST":
       return postProfile(req, res)
-      break
 
     default:
       break
@@ -51,15 +50,16 @@ const postProfile = async (
   res: NextApiResponse<ResponseData>,
 ) => {
   try {
-    const profileRequest: ProfileCreationRequest = req.body.profile
+    const profileRequest: ProfileCreationRequest = req.body.profile || req.query
     console.log(`Incoming request to make a profile: `)
     console.log(profileRequest)
 
+    const time = new Date()
     const profile = await prisma.profile.create({
       data: {
         email: profileRequest.email,
         username: profileRequest.username ? profileRequest.username : null,
-        dateCreated: "1970-01-01T00:00:00.000Z",
+        dateCreated: time.toISOString(),
       },
     })
 

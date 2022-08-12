@@ -1,16 +1,23 @@
-import { getSession, signIn } from "next-auth/react"
-import prisma from "@lib/prismaClient"
+import prisma from "@/lib/prismaClient"
 import { Profile } from "@prisma/client"
-import { useMemo } from "react"
+import { getSession } from "next-auth/react"
+import { useRouter } from "next/router"
+import { useEffect, useState } from "react"
 
-const test: boolean = true
+const test = false
 
 interface DashboardProps {
   profile: Profile
 }
 
 export default function Dashboard({ profile }: DashboardProps) {
-  const { id, email, username } = useMemo(() => profile, [profile])
+  const router = useRouter()
+  const [loaded, setLoaded] = useState(false)
+  useEffect(() => {
+    !profile ? router.replace("/setup") : setLoaded(true)
+  }, [profile, router])
+
+  if (!loaded) return <></>
 
   return (
     <section className="flex flex-col grow p-8 space-y-8">
@@ -19,7 +26,7 @@ export default function Dashboard({ profile }: DashboardProps) {
       <h2 className="text-xl font-mono font-semibold text-gray-500">
         Welcome{" "}
         <span className="bg-gradient-to-br from-fuchsia-500 to-indigo-700 bg-clip-text text-transparent">
-          {username}
+          {profile?.username}
         </span>
         !
       </h2>
@@ -66,17 +73,17 @@ export async function getServerSideProps(context: any) {
   }
 
   const session = await getSession(context)
-  console.log(session)
 
   if (!session) {
-    const { res } = context
-    res.setHeader("location", "/api/auth/signin")
-    res.statusCode = 401
-    res.end()
-    return { props: {} }
+    return {
+      redirect: {
+        destination: "/api/auth/signin",
+        permanent: false,
+      },
+    }
   }
 
-  const email = session?.user.email || ""
+  const email = session?.user.email as string
   const profile = await prisma.profile.findUnique({
     where: {
       email: email,
@@ -87,14 +94,14 @@ export async function getServerSideProps(context: any) {
       username: true,
     },
   })
-  console.log(profile)
 
   if (!profile) {
-    const { res } = context
-    res.setHeader("location", "/setup")
-    res.statusCode = 302
-    res.end()
-    return { props: {} }
+    return {
+      redirect: {
+        destination: "/dashboard/setup",
+        permanent: false,
+      },
+    }
   }
 
   return {

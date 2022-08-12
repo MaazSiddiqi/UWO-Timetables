@@ -1,14 +1,13 @@
 import AddCourses from "@/components/addCourses/addCourse"
-import Navbar from "@/components/navbar/NavBar"
 import Timetable from "@/components/timetableGraph/timetable"
 import TTName from "@/components/timetableGraph/TTName"
-import { setName, setTT } from "@features/activeTT"
-import { login } from "@features/user"
-import { useAppDispatch, useAppSelector } from "@hooks/redux"
+import { setName, setTT } from "@/features/activeTT"
+import { login } from "@/features/user"
+import { useAppDispatch, useAppSelector } from "@/hooks/redux"
 import { User } from "additional"
 import Head from "next/head"
 import { useEffect, useState } from "react"
-import calcSubjects from "../public/CALCULUS.json"
+import calcSubjects from "../../public/CALCULUS.json"
 const sampleUser: User = {
   name: "Maaz Siddiqi",
   timetables: [

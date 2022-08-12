@@ -1,12 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { useAppSelector } from "@hooks/redux"
+import { useAppSelector } from "@/hooks/redux"
+import { Timetable } from "@prisma/client"
 
 interface activeTTState {
-  value: Timetable
+  value: Timetable | null
 }
 
 const initialState: activeTTState = {
-  value: { name: "", courses: [] },
+  value: null,
 }
 
 export const activeTTSlice = createSlice({

@@ -1,6 +1,6 @@
-import { configureStore } from '@reduxjs/toolkit'
-import userReducer from "@features/user"
-import activeTTReducer from "@features/activeTT"
+import { configureStore } from "@reduxjs/toolkit"
+import userReducer from "@/features/user"
+import activeTTReducer from "@/features/activeTT"
 
 export const store = configureStore({
   reducer: {

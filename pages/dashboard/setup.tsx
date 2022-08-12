@@ -1,30 +1,59 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { getSession } from "next-auth/react"
+import { User } from "@prisma/client"
+import Router from "next/router"
+import prisma from "@/lib/prismaClient"
 
-export default function Setup() {
+interface SetupProps {
+  user: User
+}
+
+export default function Setup({ user }: SetupProps) {
   const [username, setUsername] = useState("")
+  const [finished, setFinished] = useState(false)
 
   const validateFields = () => {
-    const formValid = username !== ""
+    const formValid = username !== "" // implement username validation here
     return formValid
   }
+
+  const createProfile = async () => {
+    const { status } = await fetch(
+      `/api/profile?email=${user.email}&${
+        username !== "" ? `username=${username}` : ""
+      }`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    )
+
+    status === 400 && setFinished(true)
+  }
+
+  useEffect(() => {
+    if (!finished) return
+
+    Router.replace("/dashboard")
+  }, [finished])
 
   return (
     <div className="grid place-items-center grow">
       <div className="p-16 shadow-lg rounded-xl space-y-6 text-left">
         <h1 className="text-2xl font-bold">Welcome! Lets get you setup...</h1>
-
         <form
           onSubmit={(e) => {
             e.preventDefault()
             const valid = validateFields()
-            valid ? true : console.log("Error, invalid fields")
+            valid ? createProfile() : console.log("Error, invalid fields")
           }}
           className="flex flex-col space-y-4"
         >
-          <div>
+          <div className="space-y-1">
             <label htmlFor="username" className="p-1 text-indigo-600">
-              What should we call you?
+              Username
             </label>
             <input
               value={username}
@@ -44,4 +73,37 @@ export default function Setup() {
       </div>
     </div>
   )
+}
+export async function getServerSideProps(context: any) {
+  const session = await getSession(context)
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/api/auth/signin",
+        permanent: false,
+      },
+    }
+  }
+  const user = session?.user
+  const email = user.email as string
+  const profile = await prisma.profile.findUnique({
+    where: {
+      email,
+    },
+  })
+
+  if (profile) {
+    return {
+      redirect: {
+        destination: "/dashboard",
+        permanent: true,
+      },
+    }
+  }
+
+  return {
+    props: {
+      user,
+    },
+  }
 }
