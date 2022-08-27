@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { getSession } from "next-auth/react"
 import { User } from "@prisma/client"
 import Router from "next/router"
-import prisma from "@/lib/prismaClient"
+import prisma from "@lib/prisma"
 
 interface SetupProps {
   user: User

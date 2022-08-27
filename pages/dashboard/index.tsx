@@ -1,4 +1,4 @@
-import prisma from "@/lib/prismaClient"
+import prisma from "@lib/prisma"
 import { Profile } from "@prisma/client"
 import { getSession } from "next-auth/react"
 import { useRouter } from "next/router"
@@ -6,19 +6,11 @@ import { useEffect, useState } from "react"
 
 const test = false
 
-interface DashboardProps {
-  profile: Profile
-}
-
-export default function Dashboard({ profile }: DashboardProps) {
-  const router = useRouter()
-  const [loaded, setLoaded] = useState(false)
-  useEffect(() => {
-    !profile ? router.replace("/setup") : setLoaded(true)
-  }, [profile, router])
-
-  if (!loaded) return <></>
-
+const Dashboard: React.FC<{
+  id: string
+  username: string
+  email: string
+}> = ({ id, username, email }) => {
   return (
     <section className="flex flex-col grow p-8 space-y-8">
       <h1 className="text-2xl font-bold">Dashboard</h1>
@@ -26,7 +18,7 @@ export default function Dashboard({ profile }: DashboardProps) {
       <h2 className="text-xl font-mono font-semibold text-gray-500">
         Welcome{" "}
         <span className="bg-gradient-to-br from-fuchsia-500 to-indigo-700 bg-clip-text text-transparent">
-          {profile?.username}
+          {username}
         </span>
         !
       </h2>
@@ -42,14 +34,11 @@ export default function Dashboard({ profile }: DashboardProps) {
           +
         </button>
       </div>
-
-      <div className="text-xs pt-48">
-        <p>Profile: </p>
-        <pre>{JSON.stringify(profile)}</pre>
-      </div>
     </section>
   )
 }
+
+export default Dashboard
 
 export async function getServerSideProps(context: any) {
   if (test) {
@@ -73,7 +62,6 @@ export async function getServerSideProps(context: any) {
   }
 
   const session = await getSession(context)
-
   if (!session) {
     return {
       redirect: {
@@ -83,7 +71,7 @@ export async function getServerSideProps(context: any) {
     }
   }
 
-  const email = session?.user.email as string
+  const email = session.user.email as string
   const profile = await prisma.profile.findUnique({
     where: {
       email: email,
@@ -105,6 +93,6 @@ export async function getServerSideProps(context: any) {
   }
 
   return {
-    props: { profile }, // will be passed to the page component as props
+    props: { ...profile }, // will be passed to the page component as props
   }
 }

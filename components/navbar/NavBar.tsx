@@ -1,7 +1,7 @@
 import { useSession, signIn, signOut } from "next-auth/react"
 import UserProfile from "./userProfile"
 
-export default function Navbar() {
+const NavBar: React.FC = () => {
   const { data: session } = useSession()
 
   return (
@@ -26,3 +26,5 @@ export default function Navbar() {
     </nav>
   )
 }
+
+export default NavBar

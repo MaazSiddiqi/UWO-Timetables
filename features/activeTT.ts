@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { useAppSelector } from "@/hooks/redux"
+import { useAppSelector } from "@hooks/redux"
 import { Timetable } from "@prisma/client"
 
 interface activeTTState {

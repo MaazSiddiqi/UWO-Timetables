@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react"
-import calcSubjects from "@/public/CALCULUS.json"
+import calcSubjects from "@public/CALCULUS.json"
 import CourseListItem from "./courseListItem"
 import QueryCourses from "./queryCourses"
 import ExpandCourse from "./expandCourse"

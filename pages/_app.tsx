@@ -3,9 +3,12 @@ import { AppProps } from "next/app"
 import { store } from "lib/store"
 import { Provider } from "react-redux"
 import "../styles/globals.css"
-import Navbar from "@/components/navbar/NavBar"
+import Navbar from "@components/navbar/NavBar"
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+const MyApp: React.FC<AppProps> = ({
+  Component,
+  pageProps: { session, ...pageProps },
+}) => {
   return (
     <SessionProvider session={session}>
       <Provider store={store}>

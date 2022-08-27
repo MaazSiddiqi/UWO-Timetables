@@ -2,10 +2,12 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/components/*": ["components/*"],
-      "@/styles/*": ["styles/*"],
-      "@/public/*": ["public/*"],
-      "@features/*": ["features/*"]
+      "@components/*": ["components/*"],
+      "@styles/*": ["styles/*"],
+      "@public/*": ["public/*"],
+      "@features/*": ["features/*"],
+      "@lib/*": ["lib/*"],
+      "@hooks/*": ["hooks/*"]
     }
   },
   "checkJs": true

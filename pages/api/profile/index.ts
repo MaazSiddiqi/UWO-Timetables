@@ -1,4 +1,4 @@
-import prisma from "@/lib/prismaClient"
+import prisma from "@lib/prismaClient"
 import { Profile } from "@prisma/client"
 import { NextApiRequest, NextApiResponse } from "next/types"
 
