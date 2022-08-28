@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Timetable" ALTER COLUMN "dateCreated" SET DEFAULT CURRENT_TIMESTAMP;

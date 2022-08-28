@@ -4,13 +4,8 @@ import { User } from "@prisma/client"
 import Router from "next/router"
 import prisma from "@lib/prisma"
 
-interface SetupProps {
-  user: User
-}
-
-export default function Setup({ user }: SetupProps) {
+const Setup: React.FC<{ user: User }> = ({ user }) => {
   const [username, setUsername] = useState("")
-  const [finished, setFinished] = useState(false)
 
   const validateFields = () => {
     const formValid = username !== "" // implement username validation here
@@ -18,26 +13,16 @@ export default function Setup({ user }: SetupProps) {
   }
 
   const createProfile = async () => {
-    const { status } = await fetch(
-      `/api/profile?email=${user.email}&${
-        username !== "" ? `username=${username}` : ""
-      }`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+    const profile = await fetch(`/api/profile`, {
+      method: "POST",
+      body: JSON.stringify({ username, email: user.email }),
+      headers: {
+        "Content-Type": "application/json",
       },
-    )
-
-    status === 400 && setFinished(true)
+    })
+      .then(() => Router.replace("/dashboard"))
+      .catch((err) => console.log(err))
   }
-
-  useEffect(() => {
-    if (!finished) return
-
-    Router.replace("/dashboard")
-  }, [finished])
 
   return (
     <div className="grid place-items-center grow">
@@ -74,6 +59,9 @@ export default function Setup({ user }: SetupProps) {
     </div>
   )
 }
+
+export default Setup
+
 export async function getServerSideProps(context: any) {
   const session = await getSession(context)
   if (!session) {

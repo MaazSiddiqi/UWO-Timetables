@@ -55,12 +55,12 @@ model VerificationToken {
 }
 
 model Profile {
-  id          String      @id @default(cuid())
-  user        User        @relation(fields: [email], references: [email])
-  email       String      @unique
-  username    String?     @unique
-  dateCreated DateTime
-  timetables  Timetable[]
+  id         String      @id @default(cuid())
+  user       User        @relation(fields: [email], references: [email])
+  email      String      @unique
+  username   String?     @unique
+  // dateCreated DateTime   @default(now())
+  timetables Timetable[]
 }
 
 model Timetable {
@@ -68,8 +68,8 @@ model Timetable {
   Profile      Profile            @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId    String
   name         String
-  dateCreated  DateTime
-  lastModified DateTime?
+  dateCreated  DateTime           @default(now())
+  lastModified DateTime?          @updatedAt
   classes      ClassInTimetable[]
 }
 

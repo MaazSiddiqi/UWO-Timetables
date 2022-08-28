@@ -1,16 +1,12 @@
-import prisma from "@lib/prismaClient"
+import prisma from "@lib/prisma"
 import { Profile } from "@prisma/client"
 import { NextApiRequest, NextApiResponse } from "next/types"
 
 interface ResponseData {
+  message: string
   profile?: Profile
-  message: String
   error?: any
-}
-
-interface ProfileCreationRequest {
-  email: string
-  username?: string
+  input?: any
 }
 
 export default async function handler(
@@ -23,9 +19,8 @@ export default async function handler(
       break
     case "POST":
       return postProfile(req, res)
-
     default:
-      break
+      return res.status(405).send({ message: "Method not allowed" })
   }
 }
 
@@ -33,7 +28,7 @@ const getProfile = async (
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>,
 ) => {
-  const profileID = req.query.profileID as string
+  const profileID = req.body.profileID as string
   const profile = await prisma.profile.findUnique({
     where: { id: profileID },
   })
@@ -45,29 +40,31 @@ const getProfile = async (
     : res.status(404).send({ message: "Profile could not be found" })
 }
 
+interface ProfileCreationRequest extends NextApiRequest {
+  body: { email: string; username: string }
+}
+
 const postProfile = async (
-  req: NextApiRequest,
+  req: ProfileCreationRequest,
   res: NextApiResponse<ResponseData>,
 ) => {
   try {
-    const profileRequest: ProfileCreationRequest = req.body.profile || req.query
-    console.log(`Incoming request to make a profile: `)
-    console.log(profileRequest)
+    const { email, username } = req.body
+    console.log(`Incoming request to create profile with email ${email}`)
 
-    const time = new Date()
     const profile = await prisma.profile.create({
       data: {
-        email: profileRequest.email,
-        username: profileRequest.username ? profileRequest.username : null,
-        dateCreated: time.toISOString(),
+        email,
+        username,
       },
     })
 
     console.log("Profile created successfully")
     res.status(200).send({ profile, message: "Profile created successfully" })
   } catch (error) {
-    console.log("ERROR: Profile creation request invalid, rejected")
-    console.log(error)
-    return res.status(400).send({ message: "Something went wrong", error })
+    console.log("Error creating profile", error)
+    return res
+      .status(400)
+      .send({ message: "Something went wrong", input: req.body, error })
   }
 }
