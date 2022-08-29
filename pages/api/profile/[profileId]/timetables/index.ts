@@ -1,9 +1,16 @@
 import prisma from "@lib/prisma"
 import { Timetable } from "@prisma/client"
+import { getSession } from "next-auth/react"
 import { NextApiRequest, NextApiResponse } from "next/types"
 
 interface TimetableCreationRequest extends NextApiRequest {
   body: { name: string }
+}
+
+interface TimetableCreationResponse {
+  message: string
+  timetable: Timetable | null
+  error?: unknown
 }
 
 export default async function handler(
@@ -26,15 +33,14 @@ async function getTimetable(req: NextApiRequest, res: NextApiResponse) {
   try {
     const profileId = req.query.profileId as string
 
-    const timetables = await prisma.profile.findUnique({
+    const userTimetables = await prisma.profile.findUnique({
       where: { id: profileId },
       select: { timetables: true },
     })
 
     return res.status(200).send({
-      message: `Found timetables for profile`,
-      profileId,
-      timetables,
+      message: `Found timetables for ${profileId}`,
+      timetables: userTimetables,
     })
   } catch (error) {
     return res
@@ -44,7 +50,7 @@ async function getTimetable(req: NextApiRequest, res: NextApiResponse) {
 }
 async function createTimetable(
   req: TimetableCreationRequest,
-  res: NextApiResponse,
+  res: NextApiResponse<TimetableCreationResponse>,
 ) {
   try {
     const profileId = req.query.profileId as string
@@ -59,12 +65,11 @@ async function createTimetable(
 
     return res.status(200).send({
       message: "Created timetable for profile",
-      profileId,
       timetable,
     })
   } catch (error) {
     return res
       .status(400)
-      .send({ message: "Something went wrong", timetable: {}, error })
+      .send({ message: "Something went wrong", timetable: null, error })
   }
 }

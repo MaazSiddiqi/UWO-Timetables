@@ -3,6 +3,7 @@ import { Timetable } from "@prisma/client"
 import { getSession } from "next-auth/react"
 import { useEffect } from "react"
 import { useRouter } from "next/router"
+import Link from "next/link"
 
 const test = false
 
@@ -12,20 +13,6 @@ const Dashboard: React.FC<{
   email: string
   timetables: Timetable[]
 }> = ({ id, username, email, timetables }) => {
-  const router = useRouter()
-
-  const createTimetable = async () => {
-    const timetable = await fetch(`/api/profile/${id}/timetables`, {
-      method: "POST",
-      body: JSON.stringify({ name: "test" }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((res) => {
-      router.replace(router.asPath) // reload page
-    })
-  }
-
   return (
     <section className="flex flex-col grow p-8 space-y-8">
       <h1 className="text-2xl font-bold">Dashboard</h1>
@@ -43,14 +30,11 @@ const Dashboard: React.FC<{
           <h2 className="text-lg font-mono font-semibold text-gray-500">
             Timetables
           </h2>
-          <button
-            onClick={() => {
-              createTimetable()
-            }}
-            className="btn rounded-full h-8 w-8 bg-fuchsia-500 text-slate-50"
-          >
-            +
-          </button>
+          <Link href="/dashboard/createTimetable" passHref>
+            <a className="btn rounded-full h-6 w-6 bg-fuchsia-500 text-slate-50">
+              +
+            </a>
+          </Link>
         </div>
         <div>
           {timetables.map((timetable) => (
