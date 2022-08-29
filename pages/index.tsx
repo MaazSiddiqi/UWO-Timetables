@@ -1,7 +1,10 @@
 import { getSession } from "next-auth/react"
 
+// TODO: Upload scrapper data to prisma
+// TODO: Create apis to update timetable
+
 const Home: React.FC = () => {
-  return <div>Homepage</div>
+  return <></>
 }
 
 export default Home

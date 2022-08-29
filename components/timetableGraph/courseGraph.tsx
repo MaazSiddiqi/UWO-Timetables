@@ -1,4 +1,4 @@
-import { removeCourse } from "@features/activeTT"
+import { removeCourse } from "@features/activeTimetable"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useAppDispatch } from "@hooks/redux"
 import ClassNode from "./classNode"

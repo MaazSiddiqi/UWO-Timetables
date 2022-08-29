@@ -2,28 +2,37 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { useAppSelector } from "@hooks/redux"
 import { Timetable } from "@prisma/client"
 
-interface activeTTState {
+interface activeTimetableState {
   value: Timetable | null
 }
 
-const initialState: activeTTState = {
+const initState: activeTimetableState = {
   value: null,
 }
 
-export const activeTTSlice = createSlice({
-  name: "activeTT",
-  initialState,
+export const activeTimetableSlice = createSlice({
+  name: "activeTimetable",
+  initialState: initState,
   reducers: {
-    setTT: (state: activeTTState, action: PayloadAction<Timetable>) => {
+    setTimetable: (
+      state: activeTimetableState,
+      action: PayloadAction<Timetable>,
+    ) => {
       state.value = action.payload
     },
-    setName: (state: activeTTState, action: PayloadAction<string>) => {
+    setName: (state: activeTimetableState, action: PayloadAction<string>) => {
+      if (!state.value) return
       state.value.name = action.payload
     },
-    addCourse: (state: activeTTState, action: PayloadAction<Course>) => {
+    addCourse: (state: activeTimetableState, action: PayloadAction<Course>) => {
+      if (!state.value) return
       state.value["courses"].push(action.payload)
+      // state.value.
     },
-    removeCourse: (state: activeTTState, action: PayloadAction<Course>) => {
+    removeCourse: (
+      state: activeTimetableState,
+      action: PayloadAction<Course>,
+    ) => {
       const updatedCourses = state.value["courses"].filter(
         (course) => JSON.stringify(course) !== JSON.stringify(action.payload),
       )
@@ -32,9 +41,10 @@ export const activeTTSlice = createSlice({
   },
 })
 
-export const { setTT, addCourse, removeCourse, setName } = activeTTSlice.actions
+export const { setTimetable, addCourse, removeCourse, setName } =
+  activeTimetableSlice.actions
 
-export default activeTTSlice.reducer
+export default activeTimetableSlice.reducer
 
 export const useSearchCourses = () => {
   const { courses } = useAppSelector((store) => store.activeTT.value)

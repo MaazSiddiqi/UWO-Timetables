@@ -19,9 +19,6 @@ export default NextAuth({
       })
 
       session.user.profile = query?.Profile ?? null
-
-      console.log("session", session)
-
       return session
     },
   },

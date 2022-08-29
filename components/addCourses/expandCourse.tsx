@@ -1,4 +1,8 @@
-import { addCourse, removeCourse, useSearchCourses } from "@features/activeTT"
+import {
+  addCourse,
+  removeCourse,
+  useSearchCourses,
+} from "@features/activeTimetable"
 import { useMemo } from "react"
 import { useDispatch } from "react-redux"
 import ComponentItem from "./componentListItem"

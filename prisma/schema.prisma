@@ -114,7 +114,7 @@ model ClassInTimetable {
   classId     String
   Timetable   Timetable @relation(fields: [timetableId], references: [id])
   timetableId String
-  dateAdded   DateTime
+  dateAdded   DateTime  @default(now())
 
   @@id([classId, timetableId])
 }

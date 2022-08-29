@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "ClassInTimetable" ALTER COLUMN "dateAdded" SET DEFAULT CURRENT_TIMESTAMP;

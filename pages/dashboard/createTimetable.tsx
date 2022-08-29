@@ -3,30 +3,29 @@ import { getSession, useSession } from "next-auth/react"
 import { useRouter } from "next/router"
 import { useCallback, useEffect, useState } from "react"
 
-const CreateTimetable: React.FC<{ session: Session }> = ({ session }) => {
+const CreateTimetable: React.FC<{ id: string }> = ({ id }) => {
   const [timetableName, setTimetableName] = useState("")
   const router = useRouter()
-  const { data } = useSession()
 
   const createTimetable = useCallback(async () => {
-    console.log(session)
+    const timetable = await fetch(`/api/profile/${id}/timetables`, {
+      method: "POST",
+      body: JSON.stringify({ name: timetableName }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).catch((err) => {
+      console.log(err)
+    })
 
-    // const timetable = await fetch(`/api/profile/${id}/timetables`, {
-    //   method: "POST",
-    //   body: JSON.stringify({ name: "test" }),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // }).catch((err) => {
-    //   console.log(err)
-    // })
-  }, [session])
+    timetable
+      ? () => {
+          console.log("Created timetable", timetable)
+        }
+      : console.log("Failed to create timetable")
 
-  useEffect(() => {
-    if (data) {
-      console.log(data)
-    }
-  }, [data])
+    return router.replace("/dashboard")
+  }, [id, router, timetableName])
 
   return (
     <div className="grid place-items-center grow">
@@ -35,7 +34,7 @@ const CreateTimetable: React.FC<{ session: Session }> = ({ session }) => {
         <form
           onSubmit={(e) => {
             e.preventDefault()
-            return createTimetable()
+            if (timetableName !== "") return createTimetable()
           }}
           className="flex flex-col space-y-4"
         >
@@ -76,9 +75,18 @@ export async function getServerSideProps(context: any) {
     }
   }
 
+  if (!session.user.profile) {
+    return {
+      redirect: {
+        destination: "/dashboard/setup",
+        permanent: true,
+      },
+    }
+  }
+
   return {
     props: {
-      session,
+      id: session.user.profile.id,
     },
   }
 }

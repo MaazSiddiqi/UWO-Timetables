@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit"
 import userReducer from "@features/user"
-import activeTTReducer from "@features/activeTT"
+import activeTTReducer from "@features/activeTimetable"
 
 export const store = configureStore({
   reducer: {
