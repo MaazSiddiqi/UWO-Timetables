@@ -74,14 +74,15 @@ model Timetable {
 }
 
 model Subject {
-  code    String   @id @default(cuid())
+  id      String   @id @default(cuid())
+  code    String   @unique
   name    String
   courses Course[]
 }
 
 model Course {
   id          String   @id @default(cuid())
-  title       String
+  title       String   @unique
   level       Int
   term        String
   detail      String[]
@@ -94,7 +95,7 @@ model Class {
   id          String             @id @default(cuid())
   section     Int
   type        Type
-  classNumber Int?
+  classNumber Int                @unique
   days        Day[]
   startTime   String
   endTime     String
