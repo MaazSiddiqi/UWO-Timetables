@@ -1,35 +1,10 @@
 import { useEffect, useState, useCallback } from "react"
-import calcSubjects from "@public/CALCULUS.json"
 import CourseListItem from "./courseListItem"
 import QueryCourses from "./queryCourses"
 import ExpandCourse from "./expandCourse"
 import { CourseData } from "additional"
 
 const MAX_QUERY_SIZE = 5
-
-const savedCourses: CourseData[] = calcSubjects["Courses"]
-  .slice(0, 30)
-  .map((course) => {
-    const meta = course["Name"].split("-")
-    const name = meta[1].trim()
-    const subject = meta[0].split(" ")[0]
-    const numCode = meta[0].split(" ")[1]
-    const level = parseInt(numCode.slice(0, 4))
-    const term = numCode.slice(4)
-    const detail = course["Description"]
-    const components = course["Components"]
-
-    const data: CourseData = {
-      name,
-      subject,
-      level,
-      term,
-      detail,
-      components,
-    }
-
-    return data
-  })
 
 interface Query {
   subjectQuery: string | null
@@ -46,33 +21,27 @@ export default function AddCourses() {
 
   const [prompt, setPrompt] = useState("Popular Courses")
 
-  const query = useCallback(
-    ({ subjectQuery, levelQuery, termQuery, nameQuery }: Query) => {
+  const query = useCallback<(args: Query) => void>(
+    ({ subjectQuery, levelQuery, termQuery, nameQuery }) => {
       console.log("Querying courses...")
-      const findingSubject = subjectQuery !== null
-      const findingLevel = levelQuery !== null
-      const findingTerm = termQuery !== null
-      const findingName = nameQuery !== null
+      const checkSubject = subjectQuery !== null
+      const checkLevel = levelQuery !== null
+      const checkTerm = termQuery !== null
+      const checkName = nameQuery !== null
 
-      const result = savedCourses.filter((course: CourseData) => {
-        const { subject, level, term, name } = course
-
-        if (
-          (findingSubject
+      const result = savedCourses.filter(
+        ({ subject, level, term, name }: CourseData) =>
+          (checkSubject
             ? subject.toUpperCase().indexOf(subjectQuery.toUpperCase()) > -1
             : true) &&
-          (findingLevel
+          (checkLevel
             ? level.toString().indexOf(levelQuery.toString()) > -1
             : true) &&
-          (findingTerm
-            ? term.toUpperCase() === termQuery.toUpperCase()
-            : true) &&
-          (findingName
+          (checkTerm ? term.toUpperCase() === termQuery.toUpperCase() : true) &&
+          (checkName
             ? name.toUpperCase().indexOf(nameQuery.toUpperCase()) > -1
-            : true)
-        )
-          return course
-      })
+            : true),
+      )
 
       console.log("Courses found:", result.length)
 
@@ -91,10 +60,15 @@ export default function AddCourses() {
   )
 
   useEffect(() => {
-    setTimeout(() => {
-      setShowCourses(savedCourses.slice(0, 5))
+    const getPopularCourses = async () => {
+      const { courses } = await fetch("/api/courses/popular").then((res) =>
+        res.json(),
+      )
+      setShowCourses(courses)
       setLoaded(true)
-    }, 500)
+    }
+
+    getPopularCourses()
   }, [])
 
   return (
@@ -105,8 +79,8 @@ export default function AddCourses() {
           <QueryCourses runQuery={query} />
 
           <div className="flex justify-between font-xs text-slate-300">
-            <p>courses: {savedCourses.length}</p>
-            <p>showCourses: {showCourses.length}</p>
+            {/* <p>courses: {savedCourses.length}</p>
+            <p>showCourses: {showCourses.length}</p> */}
           </div>
 
           <div className="grow p-2 space-y-2 overflow-scroll">
