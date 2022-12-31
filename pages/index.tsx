@@ -20,7 +20,7 @@ const Home: React.FC = () => {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context)
 
-  if (session?.user)
+  if (!!session)
     return {
       redirect: {
         destination: "/dashboard",
