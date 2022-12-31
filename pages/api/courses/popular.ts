@@ -1,4 +1,4 @@
-import { savedCourses } from "@services/courses"
+import { popularCourses } from "@services/courses"
 import { NextApiRequest, NextApiResponse } from "next/types"
 
 export default async function handler(
@@ -13,6 +13,7 @@ export default async function handler(
   }
 }
 
-function getPopularCourses(req: NextApiRequest, res: NextApiResponse) {
-  return res.status(200).send({ courses: savedCourses.slice(0, 5) })
+async function getPopularCourses(req: NextApiRequest, res: NextApiResponse) {
+  const popular = await popularCourses()
+  return res.status(200).send({ courses: popular })
 }
