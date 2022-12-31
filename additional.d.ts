@@ -10,41 +10,48 @@ declare module "next-auth" {
   }
 }
 
-interface User {
-  name: string
-  timetables: Timetable[]
+export type CourseQuery = {
+  subjectQuery: string | null
+  levelQuery: number | null
+  termQuery: "A" | "B" | null
+  nameQuery: string | null
 }
 
-interface Timetable {
-  name: string
-  courses: Course[]
-}
+// interface User {
+//   name: string
+//   timetables: Timetable[]
+// }
 
-interface Course {
-  title: string
-  component: Component
-}
+// interface Timetable {
+//   name: string
+//   courses: Course[]
+// }
 
-interface CourseData {
-  name: string
-  subject: string
-  level: number
-  term: string
-  detail: string[]
-  components: Component[]
-}
+// interface Course {
+//   title: string
+//   component: Component
+// }
 
-interface Component {
-  Section: string
-  Component: string
-  "Class Nbr": string
-  Days: string[]
-  "Start Time": string
-  "End Time": string
-  Location: string
-  Instructor: string
-  Notes: string[]
-  Status: string
-  Campus: string
-  Delivery: string
-}
+// interface CourseData {
+//   name: string
+//   subject: string
+//   level: number
+//   term: string
+//   detail: string[]
+//   components: Component[]
+// }
+
+// interface Component {
+//   Section: string
+//   Component: string
+//   "Class Nbr": string
+//   Days: string[]
+//   "Start Time": string
+//   "End Time": string
+//   Location: string
+//   Instructor: string
+//   Notes: string[]
+//   Status: string
+//   Campus: string
+//   Delivery: string
+// }
