@@ -1,9 +1,11 @@
-import { Session, Timetable } from "@prisma/client"
+import { Profile, Session, Timetable } from "@prisma/client"
 import { getSession, useSession } from "next-auth/react"
 import { useRouter } from "next/router"
 import { useCallback, useEffect, useState } from "react"
 
-const CreateTimetable: React.FC<{ id: string }> = ({ id }) => {
+const CreateTimetable: React.FC<Profile & { timetables: Timetable[] }> = ({
+  id,
+}) => {
   const [timetableName, setTimetableName] = useState("")
   const router = useRouter()
 
@@ -75,7 +77,7 @@ export async function getServerSideProps(context: any) {
     }
   }
 
-  if (!session.user.profile) {
+  if (!session.profile) {
     return {
       redirect: {
         destination: "/dashboard/setup",
@@ -85,8 +87,6 @@ export async function getServerSideProps(context: any) {
   }
 
   return {
-    props: {
-      id: session.user.profile.id,
-    },
+    props: session.profile,
   }
 }
