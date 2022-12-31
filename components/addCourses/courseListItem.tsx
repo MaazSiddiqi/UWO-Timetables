@@ -1,30 +1,26 @@
-import { CourseData } from "additional"
+import { Course } from "@prisma/client"
 import { Dispatch, SetStateAction, useMemo } from "react"
 
 interface CourseListItemProps {
-  course: CourseData
-  select: Dispatch<SetStateAction<CourseData | null>>
+  course: Course
+  onSelect: (course: Course) => void
 }
 
 export default function CourseListItem({
   course,
-  select,
+  onSelect,
 }: CourseListItemProps) {
-  const { subject, name, level, term, components } = useMemo(
-    () => course,
-    [course],
-  )
   return (
     <div
-      onClick={() => select(course)}
+      onClick={() => onSelect(course)}
       className="cursor-pointer rounded-xl shadow-md p-3 btn"
     >
       <h1 className="font-semibold">
-        {subject.slice(0, 4)} {level}
-        <span className="">{term}</span>
-        <span className="text-xs text-slate-300"> ({components.length})</span>
+        {course.subjectCode.slice(0, 4)} {course.level}
+        <span className="">{course.term}</span>
+        {/* <span className="text-xs text-slate-300"> ({components.length})</span> */}
       </h1>
-      <h2 className="font-light italic text-sm">{name}</h2>
+      <h2 className="font-light italic text-sm">{course.title}</h2>
     </div>
   )
 }

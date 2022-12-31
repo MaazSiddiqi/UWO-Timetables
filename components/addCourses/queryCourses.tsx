@@ -1,36 +1,82 @@
-import { useState } from "react"
+import { Course } from "@prisma/client"
+import { CourseQuery } from "additional"
+import { useCallback, useState } from "react"
 
-interface Query {
-  subjectQuery: string | null
-  levelQuery: number | null
-  termQuery: "A" | "B" | null
-  nameQuery: string | null
+type makeQueryArgs = {
+  subject: string
+  level: string
+  term: string
+  name: string
 }
 
 interface QueryCoursesProps {
-  runQuery: ({ subjectQuery, levelQuery, termQuery, nameQuery }: Query) => void
+  onQuery: (courses: Course[]) => void
 }
 
-export default function QueryCourses({ runQuery }: QueryCoursesProps) {
+export default function QueryCourses({ onQuery }: QueryCoursesProps) {
   const [subjectQuery, setSubjectQuery] = useState("")
   const [levelQuery, setLevelQuery] = useState("")
   const [termQuery, setTermQuery] = useState("Term")
   const [nameQuery, setNameQuery] = useState("")
 
+  const runQuery = useCallback(
+    async ({ subjectQuery, levelQuery, termQuery, nameQuery }: CourseQuery) => {
+      console.log("Querying courses...")
+
+      const courses = await fetch("/api/courses/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          subjectQuery,
+          levelQuery,
+          termQuery,
+          nameQuery,
+        }),
+      })
+        .then((res) => res.json())
+        .then((res) => res.courses as Course[])
+        .catch((err) => {
+          console.log(err)
+          return [] as Course[]
+        })
+
+      console.log("Courses found:", courses.length)
+
+      return courses
+    },
+    [],
+  )
+
+  const makeQuery = useCallback(
+    ({ subject, level, term, name }: makeQueryArgs) => {
+      const query: CourseQuery = {
+        subjectQuery: subject === "" ? null : subject,
+        levelQuery: level === "" ? null : parseInt(level),
+        termQuery: ["A", "B"].indexOf(term) > -1 ? (term as "A" | "B") : null,
+        nameQuery: name === "" ? null : name,
+      }
+
+      return query
+    },
+    [],
+  )
+
   return (
     <form
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault()
-        const query: Query = {
-          subjectQuery: subjectQuery === "" ? null : subjectQuery,
-          levelQuery: levelQuery === "" ? null : parseInt(levelQuery),
-          termQuery:
-            ["A", "B"].indexOf(termQuery) > -1
-              ? (termQuery as "A" | "B")
-              : null,
-          nameQuery: nameQuery === "" ? null : nameQuery,
-        }
-        runQuery(query)
+
+        const query = makeQuery({
+          subject: subjectQuery,
+          level: levelQuery,
+          term: termQuery,
+          name: nameQuery,
+        })
+
+        const courses = await runQuery(query)
+        onQuery(courses)
       }}
       className="flex flex-col space-y-5 font-mono"
     >
