@@ -2,6 +2,7 @@ import NextAuth from "next-auth"
 import GithubProvider from "next-auth/providers/github"
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import prisma from "@lib/prisma"
+import { AdapterUser } from "next-auth/adapters"
 
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -12,14 +13,16 @@ export default NextAuth({
     }),
   ],
   callbacks: {
-    async session({ session, user }) {
-      const query = await prisma.user.findUnique({
-        where: { id: user.id },
-        select: { Profile: true },
+    async session({ session }) {
+      const profile = await prisma.profile.findUnique({
+        where: { email: session.user.email || "" },
+        include: {
+          timetables: true,
+        },
       })
 
-      session.user.profile = query?.Profile ?? null
-      return session
+      const newSession = { ...session, profile }
+      return newSession
     },
   },
 })
