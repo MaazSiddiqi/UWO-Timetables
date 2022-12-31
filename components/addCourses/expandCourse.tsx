@@ -1,5 +1,5 @@
 import {
-  addCourse,
+  addClass,
   removeCourse,
   useSearchCourses,
 } from "@features/activeTimetable"
@@ -40,7 +40,7 @@ export default function ExpandCourse({ course, deselect }: ExpandCourseProps) {
 
   const add = (component: Component) => {
     const course: Course = { title: name, component }
-    dispatch(addCourse(course))
+    dispatch(addClass(course))
   }
 
   const remove = (component: Component) => {

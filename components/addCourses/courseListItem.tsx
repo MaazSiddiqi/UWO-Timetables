@@ -1,3 +1,4 @@
+import { CourseData } from "additional"
 import { Dispatch, SetStateAction, useMemo } from "react"
 
 interface CourseListItemProps {
