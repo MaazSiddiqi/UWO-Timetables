@@ -1,26 +1,36 @@
-import { getSession } from "next-auth/react"
+// import { getSession } from "next-auth/react"
 
-// TODO: Upload scrapper data to prisma
-// TODO: Create apis to update timetable
+import { getSession } from "next-auth/react"
+import Link from "next/link"
+import { GetServerSidePropsContext } from "next/types"
+
+// TODO: Make Homepage
 
 const Home: React.FC = () => {
-  return <></>
+  return (
+    <div>
+      <h1>Welcome to uPlanned!</h1>
+      <Link href={"/dasboard"}>
+        <a>Get Started!</a>
+      </Link>
+    </div>
+  )
 }
 
-export default Home
-
-export async function getServerSideProps(context: any) {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context)
-  console.log("session:", session)
 
-  if (session)
+  if (session?.user)
     return {
       redirect: {
         destination: "/dashboard",
         permanent: true,
       },
     }
+
   return {
     props: {}, // will be passed to the page component as props
   }
 }
+
+export default Home

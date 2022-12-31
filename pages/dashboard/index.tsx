@@ -1,5 +1,6 @@
 import prisma from "@lib/prisma"
 import { Timetable } from "@prisma/client"
+import { GetServerSidePropsContext } from "next"
 import { getSession } from "next-auth/react"
 import Head from "next/head"
 import Link from "next/link"
@@ -50,7 +51,7 @@ const Dashboard: React.FC<{
 
 export default Dashboard
 
-export async function getServerSideProps(context: any) {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   if (test) {
     const profile = await prisma.profile.findUnique({
       where: { email: "maazali22@gmail.com" },
@@ -61,8 +62,6 @@ export async function getServerSideProps(context: any) {
         timetables: true,
       },
     })
-
-    console.log(profile)
 
     return {
       props: {
@@ -84,7 +83,7 @@ export async function getServerSideProps(context: any) {
   const email = session.user.email as string
   const profile = await prisma.profile.findUnique({
     where: {
-      email: email,
+      email,
     },
     select: {
       id: true,
