@@ -1,7 +1,7 @@
-import { Profile, Session, Timetable } from "@prisma/client"
-import { getSession, useSession } from "next-auth/react"
+import { Profile, Timetable } from "@prisma/client"
+import { getSession } from "next-auth/react"
 import { useRouter } from "next/router"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useState } from "react"
 
 const CreateTimetable: React.FC<Profile & { timetables: Timetable[] }> = ({
   id,
@@ -16,17 +16,23 @@ const CreateTimetable: React.FC<Profile & { timetables: Timetable[] }> = ({
       headers: {
         "Content-Type": "application/json",
       },
-    }).catch((err) => {
-      console.log(err)
     })
+      .then(
+        (res) =>
+          res.json() as Promise<{
+            message: string
+            timetable: Timetable | null
+          }>,
+      )
+      .then((res) => res.timetable)
+      .catch((err) => {
+        console.log(err)
+        return null
+      })
 
-    timetable
-      ? () => {
-          console.log("Created timetable", timetable)
-        }
-      : console.log("Failed to create timetable")
+    if (!timetable) return console.log("Failed to create timetable")
 
-    return router.replace("/dashboard")
+    return router.replace(`/dashboard/edit/${timetable.id}`)
   }, [id, router, timetableName])
 
   return (
