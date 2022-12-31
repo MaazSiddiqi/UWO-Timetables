@@ -1,16 +1,12 @@
 import AddCourses from "@components/addCourses/addCourse"
 import TTName from "@components/timetableGraph/TTName"
-import { setName, setTimetable } from "@features/activeTimetable"
-import { login } from "@features/user"
-import { useAppDispatch, useAppSelector } from "@hooks/redux"
-import { Class, Profile, Timetable } from "@prisma/client"
+import TimetableDisplay from "@components/timetableGraph/timetable"
+import { setName } from "@features/activeTimetable"
+import prisma from "@lib/prisma"
+import { ClassInTimetable, Profile, Timetable } from "@prisma/client"
 import { User } from "additional"
 import { getSession } from "next-auth/react"
-import Head from "next/head"
-import { useEffect, useState } from "react"
 import calcSubjects from "../../../public/CALCULUS.json"
-import prisma from "@lib/prisma"
-import TimetableDisplay from "@components/timetableGraph/timetable"
 
 const sampleUser: User = {
   name: "Maaz Siddiqi",
@@ -39,13 +35,13 @@ const sampleUser: User = {
   ],
 }
 
-const Edit: React.FC<{
-  profile: Profile
-  timetable: Timetable
-  classes: Class[]
-}> = ({ profile, timetable, classes }) => {
-  const [loaded, setLoaded] = useState(false)
-
+const Edit: React.FC<
+  Profile & {
+    timetable: Timetable & {
+      classes: ClassInTimetable[]
+    }
+  }
+> = ({ timetable }) => {
   // const user = useAppSelector((state) => state.user.value)
   // const { name: activeName, courses: activeCourses } = useAppSelector(
   //   (state) => state.activeTT.value,
@@ -70,17 +66,11 @@ const Edit: React.FC<{
         <div
           className={`flex flex-col justify-center items-center space-y-2 overflow-hidden p-4 text-center drop-shadow-md rounded-2xl w-10/12 bg-white`}
         >
-          {loaded ? (
-            <>
-              <TTName
-                name={timetable.name}
-                setName={(name: string) => dispatch(setName(name))}
-              />
-              <TimetableDisplay courses={classes} />
-            </>
-          ) : (
-            <>Loading...</>
-          )}
+          <TTName
+            name={timetable.name}
+            setName={(name: string) => dispatch(setName(name))}
+          />
+          <TimetableDisplay courses={timetable.classes} />
         </div>
       </div>
     </>
@@ -100,7 +90,9 @@ export async function getServerSideProps(context: any) {
     }
   }
 
-  if (!session.user.profile) {
+  console.log({ session })
+
+  if (!session.profile) {
     return {
       redirect: {
         destination: "dashboard/setup",
@@ -113,36 +105,24 @@ export async function getServerSideProps(context: any) {
 
   const timetable = await prisma.timetable.findUnique({
     where: { id: timetableId },
-  })
-
-  if (!timetable) {
-    return {
-      redirect: {
-        destination: "/dashboard",
-        permanent: true,
-      },
-    }
-  }
-
-  const classes = await prisma.classInTimetable.findMany({
-    where: { timetableId },
-    select: {
-      Class: true,
+    include: {
+      classes: true,
     },
   })
 
-  if (timetable.profileId !== session.user.profile.id) {
+  console.log({ timetable })
+
+  if (!timetable) {
     return {
-      statusCode: 403,
+      statusCode: 404,
       props: {},
     }
   }
 
   return {
     props: {
-      profile: session.user.profile,
+      ...session.profile,
       timetable,
-      classes,
     },
   }
 }
