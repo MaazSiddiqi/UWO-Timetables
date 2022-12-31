@@ -6,9 +6,11 @@ const NavBar: React.FC = () => {
 
   return (
     <nav className="flex justify-between items-center px-16 py-2 hover:bg-white">
-      <h1 className="font-mono text-2xl btn bg-gradient-to-br from-fuchsia-500 to-violet-500 bg-clip-text text-transparent px-2 py-1 rounded-lg select-none">
-        uPlanned.
-      </h1>
+      <a href="http://localhost:3000">
+        <h1 className="font-mono text-2xl btn bg-gradient-to-br from-fuchsia-500 to-violet-500 bg-clip-text text-transparent px-2 py-1 rounded-lg select-none">
+          uPlanned.
+        </h1>
+      </a>
       {/* <UserProfile
         name={"Maaz Siddiqi"}
         img={"https://github.com/MaazSiddiqi.png"}
