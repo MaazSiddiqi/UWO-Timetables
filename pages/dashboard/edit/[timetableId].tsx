@@ -1,78 +1,61 @@
-import AddCourses from "@components/addCourses/addCourse"
-import TTName from "@components/timetableGraph/TTName"
+import DevTools from "@components/DevTools"
+import SearchClasses from "@components/addCourses/addCourse"
 import TimetableDisplay from "@components/timetableGraph/timetable"
-import { setName } from "@features/activeTimetable"
-import prisma from "@lib/prisma"
-import { ClassInTimetable, Profile, Timetable } from "@prisma/client"
-import { User } from "additional"
+import { useActiveTT } from "@hooks/activeTT"
+import {
+  Class,
+  ClassInTimetable,
+  Course,
+  Profile,
+  Timetable,
+} from "@prisma/client"
+import { getTimetableById } from "@services/timetable"
 import { getSession } from "next-auth/react"
-import calcSubjects from "../../../public/CALCULUS.json"
-
-const sampleUser: User = {
-  name: "Maaz Siddiqi",
-  timetables: [
-    {
-      name: "My fall draft",
-      courses: [
-        {
-          title: calcSubjects["Courses"][0]["Name"],
-          component: calcSubjects["Courses"][0]["Components"][1],
-        },
-        {
-          title: calcSubjects["Courses"][1]["Name"],
-          component: calcSubjects["Courses"][1]["Components"][0],
-        },
-        {
-          title: calcSubjects["Courses"][9]["Name"],
-          component: calcSubjects["Courses"][9]["Components"][0],
-        },
-        {
-          title: calcSubjects["Courses"][1]["Name"],
-          component: calcSubjects["Courses"][1]["Components"][2],
-        },
-      ],
-    },
-  ],
-}
+import { useEffect } from "react"
 
 const Edit: React.FC<
   Profile & {
     timetable: Timetable & {
-      classes: ClassInTimetable[]
+      classes: (ClassInTimetable & {
+        Class: Class & {
+          Course: Course
+        }
+      })[]
     }
   }
 > = ({ timetable }) => {
-  // const user = useAppSelector((state) => state.user.value)
-  // const { name: activeName, courses: activeCourses } = useAppSelector(
-  //   (state) => state.activeTT.value,
-  // )
-  // const dispatch = useAppDispatch()
+  const { setTimetable, activeTT, addClass, removeClass, setName } =
+    useActiveTT()
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     dispatch(login(sampleUser))
-  //     dispatch(setTimetable(sampleUser.timetables[0]))
-  //     setLoaded(true)
-  //   }, 500)
-  // }, [dispatch, user, user.timetables])
+  useEffect(() => {
+    setTimetable(timetable)
+  }, [setTimetable, timetable])
+
+  if (!activeTT) return null
 
   return (
     <>
-      <div className="flex space-x-5 w-screen h-screen p-8 bg-slate-50">
-        <div className="w-7/12">
-          <AddCourses />
+      <div className="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-5 w-screen min-h-screen p-8 bg-slate-50">
+        <div className="w-full lg:w-7/12">
+          <SearchClasses
+            onAdd={async (courseClass) => await addClass(courseClass)}
+            onRemove={async (courseClass) => await removeClass(courseClass)}
+          />
         </div>
 
         <div
-          className={`flex flex-col justify-center items-center space-y-2 overflow-hidden p-4 text-center drop-shadow-md rounded-2xl w-10/12 bg-white`}
+          className={`flex flex-col justify-center items-center space-y-2 overflow-hidden p-4 text-center drop-shadow-md rounded-2xl w-full lg:w-10/12 bg-white`}
         >
-          <TTName
-            name={timetable.name}
-            setName={(name: string) => dispatch(setName(name))}
+          <TimetableDisplay
+            timetable={activeTT}
+            setName={async (name) => await setName(name)}
+            onRemove={async (courseClass) => await removeClass(courseClass)}
           />
-          <TimetableDisplay courses={timetable.classes} />
         </div>
       </div>
+      <DevTools>
+        <pre>{JSON.stringify(activeTT, null, 2)}</pre>
+      </DevTools>
     </>
   )
 }
@@ -90,8 +73,6 @@ export async function getServerSideProps(context: any) {
     }
   }
 
-  console.log({ session })
-
   if (!session.profile) {
     return {
       redirect: {
@@ -102,15 +83,7 @@ export async function getServerSideProps(context: any) {
   }
 
   const timetableId = context.params.timetableId
-
-  const timetable = await prisma.timetable.findUnique({
-    where: { id: timetableId },
-    include: {
-      classes: true,
-    },
-  })
-
-  console.log({ timetable })
+  const timetable = await getTimetableById(timetableId)
 
   if (!timetable) {
     return {
