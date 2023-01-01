@@ -2,6 +2,8 @@ import prisma from "@lib/prisma"
 import { Course, Prisma } from "@prisma/client"
 import { CourseQuery } from "additional"
 
+const MAX_QUERY_SIZE = 7
+
 // import { Course } from "@prisma/client"
 // import CALCULUSJson from "@public/CALCULUS.json"
 // import { CourseData } from "additional"
@@ -33,9 +35,26 @@ import { CourseQuery } from "additional"
 export const popularCourses = () =>
   prisma.$queryRaw(Prisma.sql`
     SELECT * FROM "Course" ORDER BY RANDOM() LIMIT 5
-  `)
+  `) as Promise<Course[]>
 
 export const searchCourses = async ({
+  subjectQuery,
+  levelQuery,
+  termQuery,
+  nameQuery,
+}: CourseQuery) => {
+  return prisma.course.findMany({
+    where: {
+      subjectCode: { contains: subjectQuery },
+      level: levelQuery,
+      term: { contains: termQuery },
+      title: { contains: nameQuery },
+    },
+    take: MAX_QUERY_SIZE,
+  })
+}
+
+const searchCoursesOLD = async ({
   subjectQuery,
   levelQuery,
   termQuery,
@@ -55,4 +74,13 @@ export const searchCourses = async ({
     const course = courses.pop() as Course
     if (checkCourse(course)) query.push(course)
   }
+  return query
+}
+
+export const getClasses = async (courseId: string) => {
+  return prisma.class.findMany({
+    where: {
+      courseId,
+    },
+  })
 }
