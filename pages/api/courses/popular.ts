@@ -15,5 +15,7 @@ export default async function handler(
 
 async function getPopularCourses(req: NextApiRequest, res: NextApiResponse) {
   const popular = await popularCourses()
+  // const courses = popular.map((course) => ({ ...course, detail: "" }))
+
   return res.status(200).send({ courses: popular })
 }
