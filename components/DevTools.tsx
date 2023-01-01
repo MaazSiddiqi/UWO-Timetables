@@ -1,7 +1,14 @@
-import { ReactNode, useState } from "react"
+import { ReactNode, useEffect, useState } from "react"
 
 const DevTools: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    window.addEventListener("keypress", (event) => {
+      if (event.key === "\\") setOpen(true)
+      if (event.key === "|") setOpen(false)
+    })
+  }, [])
 
   if (!open)
     return (
@@ -14,7 +21,7 @@ const DevTools: React.FC<{ children: ReactNode }> = ({ children }) => {
     )
 
   return (
-    <div className="fixed bottom-0 rounded-md left-0 w-screen  p-6 space-y-2 bg-slate-200/80 text-slate-700">
+    <div className="fixed bottom-0 rounded-md left-0 w-screen  p-6 space-y-2 bg-slate-200/90 backdrop-blur-md text-slate-700">
       <button
         className="absolute right-6 btn rounded-lg text-center px-2 py-1 bg-red-300"
         onClick={() => setOpen(false)}
