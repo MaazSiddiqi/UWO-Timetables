@@ -2,7 +2,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { useAppSelector } from "@hooks/redux"
 import { Class, ClassInTimetable, Course, Timetable } from "@prisma/client"
 
-type TimetableValue = Timetable & { classes: ClassInTimetable[] }
+export type TimetableValue = Timetable & {
+  classes: (ClassInTimetable & {
+    Class: Class & {
+      Course: Course
+    }
+  })[]
+}
 
 interface activeTimetableState {
   value: TimetableValue | null
@@ -25,58 +31,54 @@ export const activeTimetableSlice = createSlice({
       if (!state.value) return
       state.value.name = action.payload
     },
-    addClass: (state: activeTimetableState, action: PayloadAction<Class>) => {
-      if (!state.value) return
+    // addClass: (state: activeTimetableState, action: PayloadAction<Class>) => {
+    //   const { id } = action.payload
 
-      const { id } = action.payload
+    //   console.log("adding class")
+    //   const updateTimetable = async () => {
+    //     if (!state.value) return
+    //     if (state.value.classes.some(({ Class }) => Class.id === id)) return
 
-      // Check if course already exists
-      // If it does, don't add it
-      if (state.value.classes.some((course) => course.classId === id)) return
+    //     const timetable = await fetch(
+    //       `/api/profile/${state.value.profileId}/timetables/${state.value.id}/addClass`,
+    //       {
+    //         method: "POST",
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //         },
+    //         body: JSON.stringify({ classId: id }),
+    //       },
+    //     )
+    //       .then((res) => res.json())
+    //       .then((data) => data.timetable as TimetableValue)
+    //       .catch((error) => {
+    //         console.log(error)
+    //         return null
+    //       })
 
-      // make class in timetable from course
-      const classInTimetable: ClassInTimetable = {
-        classId: id,
-        dateAdded: new Date(),
-        timetableId: state.value.id,
-      }
-      // add class in timetable to classes in timetable
-      state.value.classes = [...state.value.classes, classInTimetable]
-    },
-    removeClass: (
-      state: activeTimetableState,
-      action: PayloadAction<Class>,
-    ) => {
-      if (!state.value) return
+    //     if (!timetable) return
+    //     console.log("updated timetable")
+    //     setTimetable(timetable)
+    //   }
+    //   updateTimetable()
+    // },
+    // removeClass: (
+    //   state: activeTimetableState,
+    //   action: PayloadAction<Class>,
+    // ) => {
+    //   if (!state.value) return
 
-      const { id } = action.payload
+    //   const { id } = action.payload
 
-      // remove class from classes in timetable
-      const updatedClasses = state.value.classes.filter(
-        (course) => course.classId !== id,
-      )
-      state.value.classes = [...updatedClasses]
-    },
+    //   // remove class from classes in timetable
+    //   const updatedClasses = state.value.classes.filter(
+    //     (course) => course.classId !== id,
+    //   )
+    //   state.value.classes = [...updatedClasses]
+    // },
   },
 })
 
-export const { setTimetable, addClass, removeClass, setName } =
-  activeTimetableSlice.actions
+export const { setTimetable, setName } = activeTimetableSlice.actions
 
 export default activeTimetableSlice.reducer
-
-// export const useSearchCourses = () => {
-//   const timetable = useAppSelector((store) => store.activeTT.value)
-//   if (!timetable) return () => [undefined, false]
-
-//   const search = ({ title, component }: Course) => {
-//     const course = courses.find(
-//       (course) =>
-//         course["title"] === title && course["component"] === component,
-//     )
-//     const found = course !== undefined
-
-//     return [course, found]
-//   }
-//   return search
-// }
