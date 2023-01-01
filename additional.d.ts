@@ -11,10 +11,10 @@ declare module "next-auth" {
 }
 
 export type CourseQuery = {
-  subjectQuery: string | null
-  levelQuery: number | null
-  termQuery: "A" | "B" | null
-  nameQuery: string | null
+  subjectQuery: string | undefined
+  levelQuery: number | undefined
+  termQuery: "A" | "B" | undefined
+  nameQuery: string | undefined
 }
 
 // interface User {
