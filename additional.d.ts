@@ -6,7 +6,12 @@ declare module "next-auth" {
    * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
    */
   interface Session extends DefaultSession {
-    profile: Profile | null
+    user: DefaultSession["user"]
+    profile:
+      | (Profile & {
+          timetables: Timetable[]
+        })
+      | null
   }
 }
 
