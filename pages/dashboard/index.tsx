@@ -42,10 +42,10 @@ const Dashboard: React.FC<Profile & { timetables: Timetable[] }> = ({
             {timetables.map((timetable) => (
               <a
                 key={timetable.id}
-                className="flex items-center justify-center btn rounded-xl w-full h-full p-2 cursor-pointer border-[1px]"
+                className="flex items-center justify-center btn rounded-xl shadow-md w-full h-20 p-2 cursor-pointer  hover:bg-slate-50"
                 href={`/dashboard/edit/${timetable.id}`}
               >
-                <h3 className="min-h-[60px] text-center font-semibold text-slate-700 select-none">
+                <h3 className="text-center font-semibold text-slate-700 select-none">
                   {timetable.name}
                 </h3>
               </a>
