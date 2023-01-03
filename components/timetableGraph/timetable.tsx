@@ -1,15 +1,30 @@
-import React, { useState } from "react"
+import { Class, ClassInTimetable, Course, Timetable } from "@prisma/client"
 import styles from "@styles/timetable.module.css"
+import TTName from "./TTName"
 import CourseGraph from "./courseGraph"
 
 interface TimetableProps {
-  courses: Course[]
+  timetable: Timetable & {
+    classes: (ClassInTimetable & {
+      Class: Class & {
+        Course: Course
+      }
+    })[]
+  }
+  setName: (name: string) => void
+  onRemove: (Class: Class) => void
   className?: string
 }
 
-export default function Timetable({ courses, className = "" }: TimetableProps) {
+export default function TimetableDisplay({
+  timetable,
+  setName,
+  onRemove,
+  className = "",
+}: TimetableProps) {
   return (
     <>
+      <TTName name={timetable.name} setName={setName} />
       <div className={`${styles.timetable} ${className}`}>
         {/* Must explicitly label grid positions so css compiler doesn't purge the currently unused dynamic classes */}
         <p className={`${styles.heading} col-start-1`}>Times</p>
@@ -50,8 +65,12 @@ export default function Timetable({ courses, className = "" }: TimetableProps) {
         <p className={`${styles.time} row-start-[30] row-end-[30]`}>9:00 PM</p>
         <p className={`${styles.time} row-start-[31] row-end-[31]`}>9:30 PM</p>
 
-        {courses.map(({ title, component }: Course, idx) => (
-          <CourseGraph key={title + idx} name={title} data={component} />
+        {timetable.classes.map(({ Class }, idx) => (
+          <CourseGraph
+            key={Class.courseId + idx}
+            data={Class}
+            onRemove={onRemove}
+          />
         ))}
       </div>
     </>

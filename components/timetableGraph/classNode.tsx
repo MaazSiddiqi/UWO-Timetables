@@ -1,12 +1,16 @@
 import { useMemo } from "react"
 
 interface ClassNodeProps {
-  name: string
-  data: Component
-  remove: Function
-  emitHover: Function
+  info: {
+    name: string
+    location: string
+    section: number
+    type: string
+  }
+  remove: () => void
+  emitHover: (state: boolean) => void
   hover: boolean
-  emitActive: Function
+  emitActive: (state: boolean) => void
   active: boolean
   start: number
   end: number
@@ -14,41 +18,29 @@ interface ClassNodeProps {
 }
 
 export default function ClassNode({
-  name,
-  data,
-  remove,
-  emitHover,
-  hover,
-  emitActive,
-  active,
+  info: { name, location, section, type },
   start,
   end,
   day,
+  remove,
+  hover,
+  emitHover,
+  active,
+  emitActive,
 }: ClassNodeProps) {
-  const {
-    Section: section,
-    Component: type,
-    "Class Nbr": classNbr,
-    Days: days,
-    "Start Time": startTime,
-    "End Time": endTime,
-    Location: location,
-    Instructor: prof,
-    Notes: notes,
-    Status: status,
-    Campus: campus,
-    Delivery: delivery,
-  } = useMemo(() => data, [data])
-
   return (
     <div
       onMouseEnter={() => emitHover(true)}
       onMouseLeave={() => {
-        active && emitActive()
+        active && emitActive(false)
         emitHover(false)
       }}
       onMouseDown={() => emitActive(true)}
-      onMouseUp={() => remove() && emitActive(false) && emitHover(false)}
+      onMouseUp={() => {
+        emitActive(false)
+        emitHover(false)
+        return remove()
+      }}
       className={`grid place-items-center overflow-x-scroll m-2 space-y-1 shrink-0 row-start-[${start}] row-end-[${end}] col-start-${day} rounded-xl p-3  ${
         hover
           ? active

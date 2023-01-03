@@ -1,6 +1,5 @@
-import { removeCourse } from "@features/activeTimetable"
-import { useCallback, useEffect, useMemo, useState } from "react"
-import { useAppDispatch } from "@hooks/redux"
+import { Class, Course } from "@prisma/client"
+import { useCallback, useMemo, useState } from "react"
 import ClassNode from "./classNode"
 
 const daysValues = ["M", "Tu", "W", "Th", "F"]
@@ -38,73 +37,60 @@ const hourValues = [
 ]
 
 interface CourseGraphProps {
-  name: string
-  data: Component
+  data: Class & {
+    Course: Course
+  }
+
+  onRemove: (courseClass: Class) => void
 }
 
-export default function CourseGraph({ name, data }: CourseGraphProps) {
-  const [position, setPosition] = useState<any>(null)
+export default function CourseGraph({ data, onRemove }: CourseGraphProps) {
   const [isHovering, setIsHovering] = useState(false)
   const [isActive, setIsActive] = useState(false)
-  const dispatch = useAppDispatch()
 
-  const {
-    Days: days,
-    "Start Time": startTime,
-    "End Time": endTime,
-  } = useMemo(() => data, [data])
-
-  const getCourse = useCallback((): Course => {
-    return { title: name, component: data }
-  }, [data, name])
-
-  const remove = useCallback(() => {
-    if (!position) return null
-    const course: Course = getCourse()
-    dispatch(removeCourse(course))
-  }, [dispatch, getCourse, position])
-
-  useEffect(() => {
-    const getRows = (startTime: string, endTime: string) => {
-      const start = hourValues.indexOf(startTime) + 2
-      const end = hourValues.indexOf(endTime) + 2
+  const { x, y } = useMemo(() => {
+    const getRows = () => {
+      const start = hourValues.indexOf(data.startTime) + 2
+      const end = hourValues.indexOf(data.endTime) + 2
 
       return { start, end }
     }
 
-    const getCols = (days: string[]) => {
-      const cols = days.map((day) => daysValues.indexOf(day) + 2)
+    const getCols = () => {
+      const cols = data.days.map((day) => daysValues.indexOf(day) + 2)
       return cols
     }
 
-    const getPosition = () => {
-      const rows = getRows(startTime, endTime)
-      const cols = getCols(days)
-      return { x: cols, y: rows }
-    }
+    const rows = getRows()
+    const cols = getCols()
+    return { x: cols, y: rows }
+  }, [data.days, data.endTime, data.startTime])
 
-    const pos = getPosition()
-    setPosition(pos)
-  }, [days, endTime, startTime])
+  const remove = useCallback(() => {
+    onRemove(data)
+  }, [data, onRemove])
 
   return (
     <>
-      {position &&
-        position["x"].map((col: any, idx: number) => (
-          <ClassNode
-            remove={remove}
-            emitHover={setIsHovering}
-            hover={isHovering}
-            emitActive={setIsActive}
-            active={isActive}
-            key={name + idx}
-            start={position["y"]["start"]}
-            end={position["y"]["end"]}
-            day={col}
-            name={name}
-            data={data}
-          />
-        ))}
+      {x.map((col: any, idx: number) => (
+        <ClassNode
+          remove={remove}
+          hover={isHovering}
+          emitHover={setIsHovering}
+          active={isActive}
+          emitActive={setIsActive}
+          key={data.id + idx}
+          start={y.start}
+          end={y.end}
+          day={col}
+          info={{
+            name: data.Course.title,
+            location: data.location,
+            section: data.section,
+            type: data.type,
+          }}
+        />
+      ))}
     </>
   )
 }
