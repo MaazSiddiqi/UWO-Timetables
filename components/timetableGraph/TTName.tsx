@@ -10,7 +10,13 @@ export default function TTName({ name, setName }: TTNameProps) {
   const [newName, setNewName] = useState("")
 
   return (
-    <div onClick={() => setIsEditing(true)} className="w-fit min-w-[1/4] ">
+    <div
+      onClick={() => {
+        setNewName(name)
+        setIsEditing(true)
+      }}
+      className="w-fit min-w-[1/4] "
+    >
       {!isEditing ? (
         <div className="relative btn flex justify-center group items-center space-x-2 py-1 px-3 rounded-xl text-xl font-semibold ">
           <h1>{name}</h1>
@@ -29,6 +35,12 @@ export default function TTName({ name, setName }: TTNameProps) {
             newName !== "" && setName(newName)
             setNewName("")
             setIsEditing(false)
+          }}
+          onKeyUp={(e) => {
+            if (e.key === "Escape") {
+              setNewName("")
+              setIsEditing(false)
+            }
           }}
         >
           <input

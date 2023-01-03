@@ -10,9 +10,7 @@ const Home: React.FC = () => {
   return (
     <div>
       <h1>Welcome to uPlanned!</h1>
-      <Link href={"/dasboard"}>
-        <a>Get Started!</a>
-      </Link>
+      <Link href={"/dasboard"}>Get Started!</Link>
     </div>
   )
 }

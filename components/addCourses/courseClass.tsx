@@ -1,4 +1,4 @@
-import { Class, Day, Delivery, Status } from "@prisma/client"
+import { Class, Day, Delivery, Status, Type } from "@prisma/client"
 
 interface CourseClassProps {
   courseClass: Class
@@ -34,7 +34,9 @@ export default function CourseClass({
         if (inTT) remove()
         else add()
       }}
-      className={`relative w-full text-sm rounded-xl shadow-md p-3 px-7 btn cursor-pointer bg-white text-start ${
+      className={`relative w-full ${
+        type !== Type.LEC ? "ml-[2%] w-[98%]" : "w-full"
+      } text-sm rounded-xl shadow-md p-3 px-7 btn cursor-pointer bg-white text-start ${
         !inTT ? "hover:bg-gray-50 active:bg-green-50" : "hover:bg-red-50"
       } `}
     >

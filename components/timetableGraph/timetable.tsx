@@ -35,6 +35,7 @@ export default function TimetableDisplay({
         <p className={`${styles.heading} col-start-6`}>Friday</p>
 
         <p className={`${styles.time} row-start-[2] row-end-[2]`}>7:00 AM</p>
+        <p className={`${styles.time} row-start-[2] row-end-[2]`}>7:00 AM</p>
         <p className={`${styles.time} row-start-[3] row-end-[3]`}>7:30 AM</p>
         <p className={`${styles.time} row-start-[4] row-end-[4]`}>8:00 AM</p>
         <p className={`${styles.time} row-start-[5] row-end-[5]`}>8:30 AM</p>

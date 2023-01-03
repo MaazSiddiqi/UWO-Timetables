@@ -67,9 +67,16 @@ export const useActiveTT = () => {
         })
 
       if (!timetable) return
-      setTimetable(timetable)
+
+      const newClass = timetable.classes.find(
+        ({ Class }) => Class.id === courseClass.id,
+      )
+
+      if (!newClass) return
+
+      return dispatch(_setTimeTable(timetable))
     },
-    [activeTT, setTimetable],
+    [activeTT, dispatch],
   )
 
   const removeClass = useCallback(
@@ -96,9 +103,9 @@ export const useActiveTT = () => {
         })
 
       if (!timetable) return
-      setTimetable(timetable)
+      return dispatch(_setTimeTable(timetable))
     },
-    [activeTT, setTimetable],
+    [activeTT, dispatch],
   )
 
   return {

@@ -75,12 +75,12 @@ export default function QueryCourses({ onQuery }: QueryCoursesProps) {
         const courses = await runQuery(query)
         onQuery(courses)
       }}
-      className="flex flex-col space-y-5 font-mono"
+      className="flex flex-col space-y-2 font-mono"
     >
       <div className="flex space-x-2">
         <input
           type="text"
-          className="w-6/12 py-2 px-3 drop-shadow-md rounded-lg outline-0 hover:drop-shadow-lg hover:scale-[1.025] focus:scale-[1.025] focus:drop-shadow-lg active:scale-[1.025] active:drop-shadow-lg focus-within:scale-[1.025] focus-within:drop-shadow-lg transition-transform duration-200"
+          className="w-6/12 py-1 px-2 input"
           value={subjectQuery}
           onChange={(e) => setSubjectQuery(e.target.value.toUpperCase())}
           placeholder="subject"
@@ -88,7 +88,7 @@ export default function QueryCourses({ onQuery }: QueryCoursesProps) {
         />
         <input
           type="text"
-          className="w-4/12 py-2 px-3 drop-shadow-md rounded-lg outline-0 hover:drop-shadow-lg hover:scale-[1.025] focus:scale-[1.025] focus:drop-shadow-lg active:scale-[1.025] active:drop-shadow-lg focus-within:scale-[1.025] focus-within:drop-shadow-lg transition-transform duration-200"
+          className="w-4/12 py-1 px-2 input"
           value={levelQuery}
           placeholder="level"
           onChange={(e) =>
@@ -98,9 +98,9 @@ export default function QueryCourses({ onQuery }: QueryCoursesProps) {
           maxLength={4}
         />
         <select
-          className={`w-2/12 py-2 px-3 ${
+          className={`w-2/12 py-1 px-2 ${
             termQuery === "" && "text-gray-400"
-          } appearance-none drop-shadow-md rounded-lg outline-0 hover:drop-shadow-lg hover:scale-[1.025] focus:scale-[1.025] focus:drop-shadow-lg active:scale-[1.025] active:drop-shadow-lg focus-within:scale-[1.025] focus-within:drop-shadow-lg transition-transform duration-200`}
+          } appearance-none input`}
           value={termQuery}
           onChange={(e) => setTermQuery(e.target.value)}
         >
@@ -111,7 +111,7 @@ export default function QueryCourses({ onQuery }: QueryCoursesProps) {
       </div>
       <input
         type="text"
-        className="w-full py-2 px-3 drop-shadow-md rounded-lg outline-0 hover:drop-shadow-lg hover:scale-[1.025] focus:scale-[1.025] focus:drop-shadow-lg active:scale-[1.025] active:drop-shadow-lg focus-within:scale-[1.025] focus-within:drop-shadow-lg transition-transform duration-200"
+        className="w-full py-1 px-2 input"
         value={nameQuery}
         onChange={(e) => setNameQuery(e.target.value.toUpperCase())}
         placeholder="course title"

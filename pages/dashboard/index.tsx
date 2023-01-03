@@ -31,10 +31,11 @@ const Dashboard: React.FC<Profile & { timetables: Timetable[] }> = ({
             <h2 className="text-lg font-mono font-semibold text-gray-500">
               Timetables
             </h2>
-            <Link href="dashboard/createTimetable" passHref>
-              <a className="btn rounded-full text-center h-6 w-6 bg-fuchsia-500 text-slate-50">
-                +
-              </a>
+            <Link
+              href="dashboard/createTimetable"
+              className="btn rounded-full text-center h-6 w-6 bg-fuchsia-500 text-slate-50"
+            >
+              +
             </Link>
           </div>
           <div className="grid py-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full gap-2">
