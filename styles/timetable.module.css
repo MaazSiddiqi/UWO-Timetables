@@ -1,5 +1,5 @@
 .timetable {
-  @apply grid grid-cols-6 grow border-2 w-full rounded-xl overflow-scroll bg-white;
+  @apply grid grid-cols-6 grow border-2 w-full rounded-xl overflow-scroll bg-white max-h-[85vh];
   grid-template-rows: repeat(31, 1fr);
   grid-template-columns: repeat(6, 1fr);
 }
