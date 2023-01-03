@@ -1,13 +1,15 @@
-import { Course } from "@prisma/client"
-import { CourseData, CourseQuery } from "additional"
-import { useCallback, useEffect, useState } from "react"
+import { Class, Course } from "@prisma/client"
+import { useEffect, useState } from "react"
 import CourseListItem from "./courseListItem"
 import ExpandCourse from "./expandCourse"
 import QueryCourses from "./queryCourses"
 
-const MAX_QUERY_SIZE = 5
+interface SearchClassesProps {
+  onAdd: (courseClass: Class) => void
+  onRemove: (courseClass: Class) => void
+}
 
-export default function AddCourses() {
+export default function SearchClasses({ onAdd, onRemove }: SearchClassesProps) {
   const [loaded, setLoaded] = useState(false)
 
   const [showCourses, setShowCourses] = useState<Course[]>([])
@@ -53,12 +55,12 @@ export default function AddCourses() {
             <p>showCourses: {showCourses.length}</p> */}
           </div>
 
+          <p className="font-light font-mono">{prompt}</p>
           <div className="grow p-2 space-y-2 overflow-scroll">
-            <p className="font-light font-mono">{prompt}</p>
             {loaded ? (
-              showCourses.map((course: Course, idx) => (
+              showCourses.map((course: Course) => (
                 <CourseListItem
-                  key={course.id + idx}
+                  key={course.id}
                   course={course}
                   onSelect={setSelectedCourse}
                 />
@@ -72,6 +74,8 @@ export default function AddCourses() {
         <ExpandCourse
           course={selectedCourse}
           deselect={() => setSelectedCourse(null)}
+          onAdd={onAdd}
+          onRemove={onRemove}
         />
       )}
     </div>

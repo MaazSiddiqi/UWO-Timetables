@@ -21,10 +21,8 @@ export default function QueryCourses({ onQuery }: QueryCoursesProps) {
 
   const runQuery = useCallback(
     async ({ subjectQuery, levelQuery, termQuery, nameQuery }: CourseQuery) => {
-      console.log("Querying courses...")
-
       const courses = await fetch("/api/courses/", {
-        method: "POST",
+        method: "POST", //TODO: change to GET
         headers: {
           "Content-Type": "application/json",
         },
@@ -42,8 +40,6 @@ export default function QueryCourses({ onQuery }: QueryCoursesProps) {
           return [] as Course[]
         })
 
-      console.log("Courses found:", courses.length)
-
       return courses
     },
     [],
@@ -52,10 +48,11 @@ export default function QueryCourses({ onQuery }: QueryCoursesProps) {
   const makeQuery = useCallback(
     ({ subject, level, term, name }: makeQueryArgs) => {
       const query: CourseQuery = {
-        subjectQuery: subject === "" ? null : subject,
-        levelQuery: level === "" ? null : parseInt(level),
-        termQuery: ["A", "B"].indexOf(term) > -1 ? (term as "A" | "B") : null,
-        nameQuery: name === "" ? null : name,
+        subjectQuery: subject === "" ? undefined : subject,
+        levelQuery: level === "" ? undefined : parseInt(level),
+        termQuery:
+          ["A", "B"].indexOf(term) > -1 ? (term as "A" | "B") : undefined,
+        nameQuery: name === "" ? undefined : name,
       }
 
       return query
@@ -116,7 +113,7 @@ export default function QueryCourses({ onQuery }: QueryCoursesProps) {
         type="text"
         className="w-full py-2 px-3 drop-shadow-md rounded-lg outline-0 hover:drop-shadow-lg hover:scale-[1.025] focus:scale-[1.025] focus:drop-shadow-lg active:scale-[1.025] active:drop-shadow-lg focus-within:scale-[1.025] focus-within:drop-shadow-lg transition-transform duration-200"
         value={nameQuery}
-        onChange={(e) => setNameQuery(e.target.value)}
+        onChange={(e) => setNameQuery(e.target.value.toUpperCase())}
         placeholder="course title"
       />
 

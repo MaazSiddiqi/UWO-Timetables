@@ -1,11 +1,7 @@
-import {
-  addClass,
-  removeCourse,
-  useSearchCourses,
-} from "@features/activeTimetable"
-import { useMemo } from "react"
-import { useDispatch } from "react-redux"
-import ComponentItem from "./componentListItem"
+import { useActiveTT } from "@hooks/activeTT"
+import { Class, Course } from "@prisma/client"
+import { useEffect, useMemo, useState } from "react"
+import CourseClass from "./CourseClass"
 
 const closeSVG = (
   <svg
@@ -25,47 +21,57 @@ const closeSVG = (
 )
 
 interface ExpandCourseProps {
-  course: CourseData
-  deselect: Function
+  course: Course
+  deselect: () => void
+  onAdd: (courseClass: Class) => void
+  onRemove: (courseClass: Class) => void
 }
 
-export default function ExpandCourse({ course, deselect }: ExpandCourseProps) {
-  const { name, subject, level, term, detail, components } = useMemo(
+export default function ExpandCourse({
+  course,
+  deselect,
+  onAdd,
+  onRemove,
+}: ExpandCourseProps) {
+  const [classes, setClasses] = useState<Class[]>([])
+
+  // TODO: add btn to expand coures details
+  const { title, subjectCode, level, term, detail } = useMemo(
     () => course,
     [course],
   )
+  const { activeTT } = useActiveTT()
 
-  const search = useSearchCourses()
-  const dispatch = useDispatch()
+  useEffect(() => {
+    const getClasses = async () => {
+      const classes = await fetch(`/api/courses/${course.id}/classes/`)
+        .then((res) => res.json())
+        .then((res) => res.classes as Class[])
+        .catch((err) => {
+          console.log(err)
+          return [] as Class[]
+        })
 
-  const add = (component: Component) => {
-    const course: Course = { title: name, component }
-    dispatch(addClass(course))
-  }
+      setClasses(classes)
+    }
 
-  const remove = (component: Component) => {
-    const course: Course = { title: name, component }
-    dispatch(removeCourse(course))
-  }
+    getClasses()
+  }, [course.id])
 
   return (
     <div className="flex flex-col w-full h-full py-1 px-2 space-y-5 overflow-hidden">
       <div className="flex items-center justify-between">
         <div className="flex flex-col">
           <h1 className="font-semibold">
-            {subject.slice(0, 4)} {level}
-            <span className="">{term}</span>
-            <span className="text-xs text-slate-300">
-              {" "}
-              ({components.length})
-            </span>
+            {subjectCode.slice(0, 4)} {level}
+            <span className="">{term}</span>{" "}
+            <span className="text-xs text-slate-300">{classes.length}</span>
           </h1>
-          <h2 className="font-light italic text-sm">{name}</h2>
+          <h2 className="font-light italic text-sm">{title}</h2>
         </div>
         <button
           onClick={() => {
             deselect()
-            console.clear()
           }}
           className="btn rounded-full h-fit w-fit shadow-lg hover:shadow-xl"
         >
@@ -73,22 +79,19 @@ export default function ExpandCourse({ course, deselect }: ExpandCourseProps) {
         </button>
       </div>
       <div className="grow py-3 space-y-3 overflow-x-hidden overflow-y-scroll">
-        {components.map((component: Component, idx: number) => {
-          const [_, found]: any = search({
-            title: name,
-            component,
-          })
-
-          return (
-            <ComponentItem
-              add={() => add(component)}
-              remove={() => remove(component)}
-              key={idx}
-              inTT={found}
-              component={component}
-            />
-          )
-        })}
+        {classes.map((courseClass) => (
+          <CourseClass
+            key={courseClass.id}
+            courseClass={courseClass}
+            add={() => onAdd(courseClass)}
+            remove={() => onRemove(courseClass)}
+            inTT={
+              activeTT?.classes.some(
+                (ttClass) => ttClass.classId === courseClass.id,
+              ) ?? false
+            }
+          />
+        ))}
       </div>
     </div>
   )

@@ -1,5 +1,4 @@
 import { Course } from "@prisma/client"
-import { Dispatch, SetStateAction, useMemo } from "react"
 
 interface CourseListItemProps {
   course: Course
@@ -10,6 +9,8 @@ export default function CourseListItem({
   course,
   onSelect,
 }: CourseListItemProps) {
+  // TODO: add btn to expand on click to reveal course.details
+
   return (
     <div
       onClick={() => onSelect(course)}
