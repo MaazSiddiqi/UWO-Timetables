@@ -22,6 +22,9 @@
   .list-item {
     @apply py-2 px-2 select-none cursor-pointer font-mono text-sm text-slate-600 hover:bg-gray-100 hover:px-3 transition-all duration-150;
   }
+  .card {
+    @apply rounded-xl shadow-md p-2;
+  }
 }
 
 .noselect {
