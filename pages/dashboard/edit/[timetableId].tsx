@@ -1,5 +1,5 @@
 import DevTools from "@components/DevTools"
-import SearchClasses from "@components/addCourses/addCourse"
+import SearchClasses from "@components/addCourses/searchCourses"
 import TimetableDisplay from "@components/timetableGraph/timetable"
 import { useActiveTT } from "@hooks/activeTT"
 import {
@@ -35,7 +35,7 @@ const Edit: React.FC<
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-5 w-screen min-h-screen p-8 bg-slate-50">
+      <div className="flex flex-col lg:flex-row space-y-5 lg:space-y-0 lg:space-x-5 w-screen min-h-[80vh] lg:max-h-[90vh] p-8 bg-slate-50">
         <div className="w-full lg:w-7/12">
           <SearchClasses
             onAdd={async (courseClass) => await addClass(courseClass)}
