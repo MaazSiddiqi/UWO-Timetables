@@ -6,9 +6,9 @@
   .test {
     @apply bg-gray-500;
   }
-  .btn {
-    @apply hover:scale-105 hover:shadow-lg active:scale-95 transition-all duration-150;
-  }
+  /* .btn {
+    @apply hover:scale-[1.02] hover:shadow-lg active:scale-95 transition-all duration-75;
+  } */
   .btn-hover {
     @apply hover:scale-105 hover:shadow-lg transition-all duration-150;
   }
@@ -16,7 +16,8 @@
     @apply active:scale-95 transition-all duration-150;
   }
   .input {
-    @apply drop-shadow-md rounded-lg outline-0 hover:drop-shadow-lg hover:scale-[1.025] focus:scale-[1.025] focus:drop-shadow-lg active:scale-[1.025] active:drop-shadow-lg focus-within:scale-[1.025] focus-within:drop-shadow-lg transition-transform duration-200;
+    @apply drop-shadow-md rounded-lg outline-0 hover:drop-shadow-lg hover:scale-[1.02] focus:scale-[1.02] focus:drop-shadow-lg active:scale-[1.02] active:drop-shadow-lg focus-within:scale-[1.02] focus-within:drop-shadow-lg transition-transform duration-200;
+    @apply text-sm;
   }
   .list-item {
     @apply py-2 px-2 select-none cursor-pointer font-mono text-sm text-slate-600 hover:bg-gray-100 hover:px-3 transition-all duration-150;
@@ -44,8 +45,4 @@ body {
 a {
   color: inherit;
   text-decoration: none;
-}
-
-* {
-  box-sizing: border-box;
 }
