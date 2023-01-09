@@ -1,5 +1,5 @@
 .timetable {
-  @apply grid grid-cols-6 grow border-2 w-full rounded-xl overflow-scroll bg-white max-h-[85vh];
+  @apply grid grid-cols-6 grow border-2 w-full rounded-xl overflow-scroll bg-white min-w-full max-h-[85vh];
   grid-template-rows: repeat(31, 1fr);
   grid-template-columns: repeat(6, 1fr);
 }
@@ -9,5 +9,5 @@
 }
 
 .time {
-  @apply grid place-items-center w-full h-12 col-start-1 text-sm font-light border-r-2 border-b-2 border-gray-100 text-gray-500;
+  @apply grid place-items-center sticky w-full h-12 col-start-1 text-sm font-light border-r-2 border-b-2 border-gray-100 text-gray-500;
 }
