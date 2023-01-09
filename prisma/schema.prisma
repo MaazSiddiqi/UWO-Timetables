@@ -113,7 +113,7 @@ model Class {
 model ClassInTimetable {
   Class       Class     @relation(fields: [classId], references: [id])
   classId     String
-  Timetable   Timetable @relation(fields: [timetableId], references: [id])
+  Timetable   Timetable @relation(fields: [timetableId], references: [id], onDelete: Cascade)
   timetableId String
   dateAdded   DateTime  @default(now())
 
