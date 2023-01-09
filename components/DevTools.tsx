@@ -13,7 +13,7 @@ const DevTools: React.FC<{ children: ReactNode }> = ({ children }) => {
   if (!open)
     return (
       <button
-        className="btn rounded-md fixed bottom-4 left-4 w-fit text-center px-2 py-1  bg-slate-300 text-slate-600"
+        className="btn rounded-md fixed bottom-4 left-4 w-fit text-center select-none px-2 py-1  bg-slate-300 text-slate-600"
         onClick={() => setOpen(true)}
       >
         Dev Tools
