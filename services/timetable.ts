@@ -20,3 +20,18 @@ export const getTimetableById = async (
       },
     },
   })
+
+export const getAllTimetables = async (): Promise<TimetableValue[]> =>
+  prisma.timetable.findMany({
+    include: {
+      classes: {
+        include: {
+          Class: {
+            include: {
+              Course: true,
+            },
+          },
+        },
+      },
+    },
+  })
